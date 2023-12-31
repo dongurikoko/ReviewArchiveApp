@@ -2,10 +2,23 @@
 ├── README.md
 ├── backend
 │   ├── cmd
+│   │   └── main.go
 │   ├── db
-│   └── db-data
+│   │   └── init
+│   │       └── 1_ddl.sql
+│   └── pkg
+│       ├── constant
+│       │   └── constant.go
+│       ├── db
+│       │   └── conn.go
+│       └── server
+│           ├── controller
+│           ├── handler
+│           ├── model
+│           └── server.go
 ├── directory_structure.txt
 ├── docker-compose.yaml
-└── frontend
+├── frontend
+└── go.mod
 
-6 directories, 3 files
+13 directories, 9 files
