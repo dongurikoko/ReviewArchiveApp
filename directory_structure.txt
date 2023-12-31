@@ -1,0 +1,11 @@
+.
+├── README.md
+├── backend
+│   ├── cmd
+│   ├── db
+│   └── db-data
+├── directory_structure.txt
+├── docker-compose.yaml
+└── frontend
+
+6 directories, 3 files
