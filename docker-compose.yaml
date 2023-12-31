@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  # MySQLサービス
+  mysql:
+    image: mysql
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: "review-archive"
+      MYSQL_DATABASE: "review_archive_api"
+    ports:
+      - "127.0.0.1:3307:3306" #右側のコンテナ側のポート番号(3306)は変えちゃダメ!
+    volumes:
+      - ./backend/db/init:/docker-entrypoint-initdb.d
+      - ./backend/db-data:/var/lib/mysql
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: "review-archive"
+    ports:
+      - "127.0.0.1:4001:80"
+    links:
+      - mysql
+
+  # Goバックエンドサービス
+  #backend:
+  #  image: golang:1.16
+  # working_dir: /go/src/app
+  #  volumes:
+  #    - ./path/to/your/go-app:/go/src/app
+  #  ports:
+  #    - "8080:8080"
+  #  command: sh -c "go build -o main . && ./main"
+
+  # Reactフロントエンドサービス
+  #frontend:
+  # image: node:14
+  #  working_dir: /app
+  #  volumes:
+  #    - ./path/to/your/react-app:/app
+  #    - /app/node_modules
+  #  ports:
+  #    - "3000:3000"
+  #  environment:
+  #    - NODE_ENV=development
+  ##  command: sh -c "npm install && npm start"
+
+volumes:
+  db-data:
+    driver: local
