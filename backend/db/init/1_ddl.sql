@@ -25,8 +25,6 @@ CREATE TABLE IF NOT EXISTS `review_archive_api`.`content`(
   `after_code` TEXT  COMMENT '修正後コード',
   `review` TEXT  COMMENT 'レビュー内容',
   `memo` TEXT  COMMENT 'メモ',
-  `created_at` DATETIME NOT NULL COMMENT '作成時刻',
-  `updated_at` DATETIME NOT NULL COMMENT '修正時刻',
   PRIMARY KEY (`content_id`))
 ENGINE = InnoDB
 COMMENT = 'コンテンツ';
