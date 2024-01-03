@@ -28,29 +28,23 @@ services:
     links:
       - mysql
 
-  # Goバックエンドサービス
-  #backend:
-  #  image: golang:1.16
-  # working_dir: /go/src/app
-  #  volumes:
-  #    - ./path/to/your/go-app:/go/src/app
-  #  ports:
-  #    - "8080:8080"
-  #  command: sh -c "go build -o main . && ./main"
+  frontend:
+    image: node:latest
+    volumes:
+      - ./frontend:/app
+    working_dir: /app
+    command: npm start
+    ports:
+      - "3000:3000"
 
-  # Reactフロントエンドサービス
-  #frontend:
-  # image: node:14
-  #  working_dir: /app
-  #  volumes:
-  #    - ./path/to/your/react-app:/app
-  #    - /app/node_modules
-  #  ports:
-  #    - "3000:3000"
-  #  environment:
-  #    - NODE_ENV=development
-  ##  command: sh -c "npm install && npm start"
-
+  backend:
+    image: golang:latest
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    command: go run main.go
+    ports:
+      - "8000:8000"
 volumes:
   db-data:
     driver: local
