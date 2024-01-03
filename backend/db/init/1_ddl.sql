@@ -35,8 +35,8 @@ COMMENT = 'コンテンツ';
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `review_archive_api`.`keyword` (
   `id` INT NOT NULL COMMENT 'コンテンツID',
-  `keyword` VARCHAR(255) NOT NULL COMMENT 'キーワード',
-  PRIMARY KEY (`id`, `keyword`),
+  `contentKeyword` VARCHAR(255) NOT NULL COMMENT 'キーワード',
+  PRIMARY KEY (`id`, `contentKeyword`),
   CONSTRAINT `fk_content_keyword`
     FOREIGN KEY (`id`)
     REFERENCES `review_archive_api`.`content` (`content_id`)

@@ -3,47 +3,30 @@ package server
 import (
 	"log"
 
+	"github.com/dongurikoko/ReviewArchiveApp/backend/pkg/db"
+	"github.com/dongurikoko/ReviewArchiveApp/backend/pkg/server/controller"
+	"github.com/dongurikoko/ReviewArchiveApp/backend/pkg/server/handler"
+	"github.com/dongurikoko/ReviewArchiveApp/backend/pkg/server/model"
 	"github.com/labstack/echo/v4"
 	echomiddleware "github.com/labstack/echo/v4/middleware"
-
-	"go-college/pkg/db"
-	"go-college/pkg/http/middleware"
-	"go-college/pkg/server/handler"
-	"go-college/pkg/server/model"
-	"go-college/pkg/server/service"
-
-	"github.com/redis/go-redis/v9"
 )
 
 var (
 	sqlDB, _ = db.GetConn()
-	//httpResponse = response.NewHttpResponse()
-	redisClient = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379", // Redisサーバーのアドレス
-		Password: "",               // パスワードがある場合は設定
-		DB:       0,                // 使用するDB番号
-	})
-	redisCtx = db.GetRedisCtx()
 
-	userRepository = model.NewUserRepository(sqlDB) //userテーブルの部分
-	authMiddleware = middleware.NewMiddleware(userRepository)
+	//userRepository = model.NewUserRepository(sqlDB) //userテーブルの部分
+	//authMiddleware = middleware.NewMiddleware(userRepository)
 
-	gachaProbabilityRepository   = model.NewGachaProbabilityRepository(sqlDB) //gachaProbabilityテーブルの部分
-	userCollectionItemRepository = model.NewUserCollectionItemRepository(sqlDB)
-	collectionItemRepository     = model.NewCollectionItemRepository(sqlDB)
-	redisRepository              = model.NewRedisRepository(redisClient, redisCtx)
+	contentRepository = model.NewContentRepository(sqlDB)
+	keywordRepository = model.NewKeywordRepository(sqlDB)
 
-	gameService       = service.NewGameService(userRepository)
-	gachaService      = service.NewGachaService(userRepository, gachaProbabilityRepository, userCollectionItemRepository, collectionItemRepository)
-	rankingService    = service.NewRankingService(userRepository, redisRepository)
-	collectionService = service.NewCollectionService(userCollectionItemRepository, collectionItemRepository, redisRepository)
+	contentContoroller = controller.NewContentContoroller(contentRepository, keywordRepository)
+	keywordContoroller = controller.NewKeywordContoroller(contentRepository, keywordRepository)
+	listContoroller    = controller.NewListContoroller(contentRepository, keywordRepository)
 
-	userHandler       = handler.NewUserHandler(userRepository)
-	settingHandler    = handler.NewSettingHandler()
-	gameHandler       = handler.NewGameHandler(gameService)
-	gachaHandler      = handler.NewGachaHandler(gachaService)
-	rankingHandler    = handler.NewRankingHandler(rankingService)
-	collectionHandler = handler.NewCollectionHandler(collectionService)
+	contentHandler = handler.NewContentHandler(contentContoroller)
+	keywordHandler = handler.NewKeywordHandler(keywordContoroller)
+	listHandler    = handler.NewListHandler(listContoroller)
 )
 
 // Serve HTTPサーバを起動する
@@ -61,21 +44,12 @@ func Serve(addr string) {
 
 	/* ===== URLマッピングを行う ===== */
 	// 認証を必要としないAPI
-	e.GET("/setting/get", settingHandler.HandleSettingGet())
-	e.POST("/user/create", userHandler.HandleUserCreate())
-
-	// 認証を必要とするAPI
-	// AuthenticateMiddlewareによってx-tokenヘッダのチェックとユーザーの特定が行われる
-	authAPI := e.Group("", authMiddleware.AuthenticateMiddleware())
-	authAPI.GET("/user/get", userHandler.HandleUserGet())
-	authAPI.POST("/user/update", userHandler.HandleUserUpdate())
-	authAPI.GET("/collection/list", collectionHandler.HandleCollectionList())
-
-	authAPI.GET("/ranking/list", rankingHandler.HandleRankingGet())
-
-	authAPI.POST("/game/finish", gameHandler.HandleGameFinish())
-
-	authAPI.POST("/gacha/draw", gachaHandler.HandleGachaDraw())
+	e.POST("/content/create", contentHandler.HandleContentCreate())
+	e.POST("/content/update/:content_id", contentHandler.HandleContentUpdate())
+	e.DELETE("/content/delete/:content_id", contentHandler.HandleContentDelete())
+	e.GET("/list/get", listHandler.HandleListGet())
+	e.GET("/list/get/:content_id", listHandler.HandleListGetByContentID())
+	e.GET("/keyword/search", keywordHandler.HandleKeywordSearch())
 
 	/* ===== サーバの起動 ===== */
 	log.Println("Server running...")
