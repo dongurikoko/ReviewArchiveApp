@@ -3,10 +3,11 @@ package server
 import (
 	"log"
 
-	"github.com/dongurikoko/ReviewArchiveApp/backend/pkg/db"
-	"github.com/dongurikoko/ReviewArchiveApp/backend/pkg/server/controller"
-	"github.com/dongurikoko/ReviewArchiveApp/backend/pkg/server/handler"
-	"github.com/dongurikoko/ReviewArchiveApp/backend/pkg/server/model"
+	"reviewArchive/pkg/db"
+	"reviewArchive/pkg/server/controller"
+	"reviewArchive/pkg/server/handler"
+	"reviewArchive/pkg/server/model"
+
 	"github.com/labstack/echo/v4"
 	echomiddleware "github.com/labstack/echo/v4/middleware"
 )
@@ -21,12 +22,12 @@ var (
 	keywordRepository = model.NewKeywordRepository(sqlDB)
 
 	contentContoroller = controller.NewContentContoroller(contentRepository, keywordRepository)
-	keywordContoroller = controller.NewKeywordContoroller(contentRepository, keywordRepository)
-	listContoroller    = controller.NewListContoroller(contentRepository, keywordRepository)
+	//keywordContoroller = controller.NewKeywordContoroller(contentRepository, keywordRepository)
+	//listContoroller    = controller.NewListContoroller(contentRepository, keywordRepository)
 
 	contentHandler = handler.NewContentHandler(contentContoroller)
-	keywordHandler = handler.NewKeywordHandler(keywordContoroller)
-	listHandler    = handler.NewListHandler(listContoroller)
+	//keywordHandler = handler.NewKeywordHandler(keywordContoroller)
+	//listHandler    = handler.NewListHandler(listContoroller)
 )
 
 // Serve HTTPサーバを起動する
@@ -45,11 +46,11 @@ func Serve(addr string) {
 	/* ===== URLマッピングを行う ===== */
 	// 認証を必要としないAPI
 	e.POST("/content/create", contentHandler.HandleContentCreate())
-	e.POST("/content/update/:content_id", contentHandler.HandleContentUpdate())
-	e.DELETE("/content/delete/:content_id", contentHandler.HandleContentDelete())
-	e.GET("/list/get", listHandler.HandleListGet())
-	e.GET("/list/get/:content_id", listHandler.HandleListGetByContentID())
-	e.GET("/keyword/search", keywordHandler.HandleKeywordSearch())
+	//e.POST("/content/update/:content_id", contentHandler.HandleContentUpdate())
+	//e.DELETE("/content/delete/:content_id", contentHandler.HandleContentDelete())
+	//e.GET("/list/get", listHandler.HandleListGet())
+	//e.GET("/list/get/:content_id", listHandler.HandleListGetByContentID())
+	//e.GET("/keyword/search", keywordHandler.HandleKeywordSearch())
 
 	/* ===== サーバの起動 ===== */
 	log.Println("Server running...")
