@@ -47,7 +47,7 @@ func Serve(addr string) {
 	// 認証を必要としないAPI
 	e.POST("/content/create", contentHandler.HandleContentCreate())
 	//e.POST("/content/update/:content_id", contentHandler.HandleContentUpdate())
-	//e.DELETE("/content/delete/:content_id", contentHandler.HandleContentDelete())
+	e.DELETE("/content/delete/:content_id", contentHandler.HandleContentDelete())
 	//e.GET("/list/get", listHandler.HandleListGet())
 	//e.GET("/list/get/:content_id", listHandler.HandleListGetByContentID())
 	//e.GET("/keyword/search", keywordHandler.HandleKeywordSearch())

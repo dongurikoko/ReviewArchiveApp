@@ -30,6 +30,7 @@ func NewContentContoroller(contentRepository model.ContentRepositoryInterface,
 
 type ContentControllerInterface interface {
 	ContentCreate(record *ContentRequest) error
+	ContentDelete(id int) error
 }
 
 // コンテンツ作成ロジック
@@ -64,3 +65,9 @@ func (c *ContentController) ContentUpdate(record *Content_keywords) error {
 }*/
 
 // コンテンツ削除ロジック
+func (c *ContentController) ContentDelete(id int) error {
+	if err := c.ContentRepository.DeleteContentByContentID(id); err != nil {
+		return fmt.Errorf("failed to DeleteContentByContentID in ContentDelete: %w", err)
+	}
+	return nil
+}
