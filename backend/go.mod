@@ -1,4 +1,4 @@
-module github.com/dongurikoko/ReviewArchiveApp
+module reviewArchive
 
 go 1.21.4
 

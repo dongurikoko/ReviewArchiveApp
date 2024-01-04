@@ -14,6 +14,11 @@ type Content struct {
 	Memo        string
 }
 
+type ContentWithID struct {
+	Content_id    int
+	Content_value Content
+}
+
 type ContentRepository struct {
 	Conn *sql.DB
 }
@@ -23,25 +28,33 @@ func NewContentRepository(conn *sql.DB) *ContentRepository {
 }
 
 type ContentRepositoryInterface interface {
-	InsertContent(record *Content) error
+	InsertContent(record *Content) (int, error)
 	UpdateContentByContentID(id int, record *Content) error
 	DeleteContentByContentID(id int) error
-	SelectContent() ([]*Content, error)
+	SelectContent() ([]*ContentWithID, error)
 	SelectContentByContentID(id int) (*Content, error)
 }
 
 // contentテーブルにレコードを追加する
-func (r *ContentRepository) InsertContent(record *Content) error {
+func (r *ContentRepository) InsertContent(record *Content) (int, error) {
 	// レコードを追加する
-	if _, err := r.Conn.Exec("INSERT INTO content (title, before_code, after_code, review, memo) VALUES (?, ?, ?, ?, ?)",
+	result, err := r.Conn.Exec("INSERT INTO content (title, before_code, after_code, review, memo) VALUES (?, ?, ?, ?, ?)",
 		record.Title,
 		record.Before_code,
 		record.After_code,
 		record.Review,
-		record.Memo); err != nil {
-		return fmt.Errorf("failed to InsertContent: %w", err)
+		record.Memo)
+	if err != nil {
+		return 0, fmt.Errorf("failed to InsertContent: %w", err)
 	}
-	return nil
+
+	// 最後に挿入された行のIDを取得する
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("failed to retrieve last insert ID: %w", err)
+	}
+
+	return int(id), nil
 }
 
 // contentテーブルのレコードをidを条件に更新する
@@ -67,7 +80,7 @@ func (r *ContentRepository) DeleteContentByContentID(id int) error {
 }
 
 // contentテーブルを一覧取得する
-func (r *ContentRepository) SelectContent() ([]*Content, error) {
+func (r *ContentRepository) SelectContent() ([]*ContentWithID, error) {
 	rows, err := r.Conn.Query("SELECT * FROM content")
 	if err != nil {
 		return nil, fmt.Errorf("failed to SelectContent: %w", err)
@@ -77,13 +90,14 @@ func (r *ContentRepository) SelectContent() ([]*Content, error) {
 }
 
 // rowデータをContentデータに変換する
-func ConverToContent(rows *sql.Rows) ([]*Content, error) {
+func ConverToContent(rows *sql.Rows) ([]*ContentWithID, error) {
 	defer rows.Close()
 
-	var contents []*Content
+	var contents []*ContentWithID
 	for rows.Next() {
-		content := &Content{}
-		if err := rows.Scan(&content.Title, &content.Before_code, &content.After_code, &content.Review, &content.Memo); err != nil {
+		content := &ContentWithID{}
+		if err := rows.Scan(&content.Content_id, &content.Content_value.Title, &content.Content_value.Before_code,
+			&content.Content_value.After_code, &content.Content_value.Review, &content.Content_value.Memo); err != nil {
 			return nil, fmt.Errorf("error scanning row in ConverToContent: %w", err)
 		}
 		contents = append(contents, content)

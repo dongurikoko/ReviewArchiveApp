@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/dongurikoko/ReviewArchiveApp/backend/pkg/server"
+	"reviewArchive/pkg/server"
 )
 
 var (
