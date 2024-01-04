@@ -37,12 +37,26 @@ func (h *ContentHandler) HandleContentCreate() echo.HandlerFunc {
 	}
 }
 
-/* コンテンツのアップデート処理
+// コンテンツのアップデート処理
 func (h *ContentHandler) HandleContentUpdate() echo.HandlerFunc {
 	return func(c echo.Context) error {
-
+		req := &controller.ContentRequest{}
+		if err := c.Bind(req); err != nil {
+			return fmt.Errorf("failed to bind request in HandleContentUpdate: %w", err)
+		}
+		// URLパラメータからcontent_idを取得
+		content_id, err := strconv.Atoi(c.Param("content_id"))
+		if err != nil {
+			return fmt.Errorf("failed to get content_id in HandleContentUpdate: %w", err)
+		}
+		if err := h.ContentController.ContentUpdate(content_id, req); err != nil {
+			return fmt.Errorf("failed to ContentUpdate in HandleContentUpdate: %w", err)
+		}
+		return c.JSON(http.StatusOK, echo.Map{
+			"message": "Success to Update Content",
+		})
 	}
-}*/
+}
 
 // コンテンツの削除処理(contentテーブルを削除するとkeywordも自動で削除される)
 func (h *ContentHandler) HandleContentDelete() echo.HandlerFunc {
