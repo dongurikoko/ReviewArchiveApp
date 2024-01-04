@@ -73,7 +73,7 @@ func (r *ContentRepository) UpdateContentByContentID(id int, record *Content) er
 
 // contentテーブルのレコードをidを条件に削除する
 func (r *ContentRepository) DeleteContentByContentID(id int) error {
-	if _, err := r.Conn.Exec("DELETE FROM content WHERE id = ?", id); err != nil {
+	if _, err := r.Conn.Exec("DELETE FROM content WHERE content_id = ?", id); err != nil {
 		return fmt.Errorf("failed to DeleteContentByContentID: %w", err)
 	}
 	return nil
@@ -110,7 +110,7 @@ func ConverToContent(rows *sql.Rows) ([]*ContentWithID, error) {
 
 // contentテーブルをidを条件に取得する
 func (r *ContentRepository) SelectContentByContentID(id int) (*Content, error) {
-	row := r.Conn.QueryRow("SELECT * FROM content WHERE id = ?", id)
+	row := r.Conn.QueryRow("SELECT * FROM content WHERE content_id = ?", id)
 
 	content := &Content{}
 	if err := row.Scan(&content.Title, &content.Before_code, &content.After_code, &content.Review, &content.Memo); err != nil {
