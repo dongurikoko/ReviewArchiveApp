@@ -59,7 +59,7 @@ func (r *ContentRepository) InsertContent(record *Content) (int, error) {
 
 // contentテーブルのレコードをidを条件に更新する
 func (r *ContentRepository) UpdateContentByContentID(id int, record *Content) error {
-	if _, err := r.Conn.Exec("UPDATE content SET title = ?, before_code = ?, after_code = ?, review = ?, memo = ? WHERE id = ?",
+	if _, err := r.Conn.Exec("UPDATE content SET title = ?, before_code = ?, after_code = ?, review = ?, memo = ? WHERE content_id = ?",
 		record.Title,
 		record.Before_code,
 		record.After_code,
