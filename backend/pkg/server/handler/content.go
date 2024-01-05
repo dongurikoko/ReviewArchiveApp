@@ -64,7 +64,7 @@ func (h *ContentHandler) HandleContentDelete() echo.HandlerFunc {
 		// URLパラメータからcontent_idを取得
 		content_id, err := strconv.Atoi(c.Param("content_id"))
 
-		fmt.Printf("content_id: %v\n", content_id)
+		//fmt.Printf("content_id: %v\n", content_id)
 
 		if err != nil {
 			return fmt.Errorf("failed to get content_id in HandleContentDelete: %w", err)
