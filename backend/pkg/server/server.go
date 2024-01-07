@@ -23,11 +23,11 @@ var (
 
 	contentContoroller = controller.NewContentContoroller(contentRepository, keywordRepository)
 	//keywordContoroller = controller.NewKeywordContoroller(contentRepository, keywordRepository)
-	//listContoroller    = controller.NewListContoroller(contentRepository, keywordRepository)
+	listContoroller = controller.NewListContoroller(contentRepository, keywordRepository)
 
 	contentHandler = handler.NewContentHandler(contentContoroller)
 	//keywordHandler = handler.NewKeywordHandler(keywordContoroller)
-	//listHandler    = handler.NewListHandler(listContoroller)
+	listHandler = handler.NewListHandler(listContoroller)
 )
 
 // Serve HTTPサーバを起動する
@@ -48,7 +48,7 @@ func Serve(addr string) {
 	e.POST("/content/create", contentHandler.HandleContentCreate())
 	e.POST("/content/update/:content_id", contentHandler.HandleContentUpdate())
 	e.DELETE("/content/delete/:content_id", contentHandler.HandleContentDelete())
-	//e.GET("/list/get", listHandler.HandleListGet())
+	e.GET("/list/get", listHandler.HandleListGet())
 	//e.GET("/list/get/:content_id", listHandler.HandleListGetByContentID())
 	//e.GET("/keyword/search", keywordHandler.HandleKeywordSearch())
 

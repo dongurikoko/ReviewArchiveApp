@@ -25,6 +25,7 @@ type KeywordRepositoryInterface interface {
 	InsertKeyword(id int, keywords []string) error
 	DeleteKeywordByID(id int) error
 	SelectKeywordByID(id int) ([]*Keyword, error)
+	SelectStringKeywordByID(id int) ([]string, error)
 }
 
 // キーワードテーブルに挿入する
@@ -81,6 +82,15 @@ func (r *KeywordRepository) SelectKeywordByID(id int) ([]*Keyword, error) {
 	return ConverToKeyword(rows)
 }
 
+// キーワードをidを条件に取得する([]stringを返す場合)
+func (r *KeywordRepository) SelectStringKeywordByID(id int) ([]string, error) {
+	rows, err := r.Conn.Query("SELECT contentKeyword FROM keyword WHERE id = ?", id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to SELECT * in SelectKeywordByID: %w", err)
+	}
+	return ConverToString(rows)
+}
+
 // rowデータをKeywordデータに変換する
 func ConverToKeyword(rows *sql.Rows) ([]*Keyword, error) {
 	defer rows.Close()
@@ -92,6 +102,24 @@ func ConverToKeyword(rows *sql.Rows) ([]*Keyword, error) {
 			return nil, fmt.Errorf("failed to Scan in ConverToKeyword: %w", err)
 		}
 		keywords = append(keywords, keyword)
+	}
+	return keywords, nil
+}
+
+// rowデータを[]stringに変換する
+func ConverToString(rows *sql.Rows) ([]string, error) {
+	defer rows.Close()
+
+	var keywords []string
+	for rows.Next() {
+		var keyword string
+		if err := rows.Scan(&keyword); err != nil {
+			return nil, fmt.Errorf("failed to Scan in ConverToString: %w", err)
+		}
+		keywords = append(keywords, keyword)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error after row iteration in convertTostring: %w", err)
 	}
 	return keywords, nil
 }
