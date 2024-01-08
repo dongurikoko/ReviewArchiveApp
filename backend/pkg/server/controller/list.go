@@ -26,6 +26,7 @@ func NewListContoroller(contentRepository model.ContentRepositoryInterface,
 
 type ListControllerInterface interface {
 	ListGet() ([]*ListResponse, error)
+	ListGetByContentID(ID int) (*ContentRequest, error)
 }
 
 // コンテンツの一覧取得ロジック
@@ -57,3 +58,28 @@ func (c *ListController) ListGet() ([]*ListResponse, error) {
 }
 
 // 特定のコンテンツの詳細取得ロジック
+func (c *ListController) ListGetByContentID(ID int) (*ContentRequest, error) {
+	// contentテーブルからIDを条件にレコードを取得
+	content, err := c.ContentRepository.SelectContentByContentID(ID)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to SelectContentByContentID in ListGetByContentID: %w", err)
+	}
+
+	// keywordテーブルからIDを条件にレコードを取得
+	keyword, err := c.KeywordRepository.SelectStringKeywordByID(ID)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to SelectStringKeywordByID in ListGetByContentID: %w", err)
+	}
+
+	// contentテーブルとkeywordテーブルのレコードを結合
+	return &ContentRequest{
+		Title:       content.Title,
+		Before_code: content.Before_code,
+		After_code:  content.After_code,
+		Review:      content.Review,
+		Memo:        content.Memo,
+		Keywords:    keyword,
+	}, nil
+}

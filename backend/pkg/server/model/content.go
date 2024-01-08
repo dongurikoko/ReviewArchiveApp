@@ -2,6 +2,7 @@ package model
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 )
 
@@ -110,13 +111,15 @@ func ConverToContent(rows *sql.Rows) ([]*ContentWithID, error) {
 
 // contentテーブルをidを条件に取得する
 func (r *ContentRepository) SelectContentByContentID(id int) (*Content, error) {
-	row := r.Conn.QueryRow("SELECT * FROM content WHERE content_id = ?", id)
+	row := r.Conn.QueryRow("SELECT title,before_code,after_code,review,memo FROM content WHERE content_id = ?", id)
 
+	if err := row.Err(); err != nil {
+		return nil, fmt.Errorf("failed to QueryRow in SelectContentByContentID: %w", err)
+	}
 	content := &Content{}
-	if err := row.Scan(&content.Title, &content.Before_code, &content.After_code, &content.Review, &content.Memo); err != nil {
-		if err == sql.ErrNoRows {
-			return nil, nil
-		}
+	err := row.Scan(&content.Title, &content.Before_code, &content.After_code, &content.Review, &content.Memo)
+
+	if errors.Is(err, sql.ErrNoRows) {
 		return nil, fmt.Errorf("failed to Scan in SelectContentByContentID: %w", err)
 	}
 
