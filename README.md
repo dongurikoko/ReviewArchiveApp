@@ -9,9 +9,13 @@ App.tsx → index.tsx → index.html → ブラウザ
 ### install
 npm install react-router-dom
 
-### 通信
-backendフォルダ下で以下を行う。
+### 起動
+docker compose up
+ブラウザでhttp://localhost:3000/　
+にアクセス
 
+(dockerを使わない場合：
+backendフォルダ下で以下を行う。
 1.環境変数の設定(OS毎に調整) 
 export MYSQL_USER=root
 export MYSQL_PASSWORD=review-archive
@@ -24,4 +28,4 @@ go run ./cmd/main.go
 
 frontendフォルダ下で以下を行う。
 react起動
-npm start
+npm start)
