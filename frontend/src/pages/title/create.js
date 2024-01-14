@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-const Register = () => {
+const Create = () => {
 
     const [newContent, setNewContent] = useState({
         title: "",
@@ -70,4 +70,4 @@ const Register = () => {
         </div>
     )
 }
-export default Register;
+export default Create;
