@@ -50,10 +50,10 @@ const Create = () => {
     }
     return(
         <div>
-            <h1>コンテンツの新規作成</h1>
+            <div className = "miniTitle">コンテンツの新規作成</div>
             <form onSubmit={handleSubmit}>
                 <input value={newContent.title} onChange={handleContentChange} 
-                type="text" name="title" placeholder="タイトル" required/>
+                type="text" name="title" placeholder="タイトル(必須)" required/>
                 <textarea value={newContent.before_code} onChange={handleContentChange}
                 type="text" name="before_code" placeholder="修正前コード" rows="4"/>
                 <textarea value={newContent.after_code} onChange={handleContentChange}
@@ -63,7 +63,7 @@ const Create = () => {
                 <textarea value={newContent.memo} onChange={handleContentChange}
                 type="text" name="memo" placeholder="メモ" rows="4"/>
                 <input value={newContent.keywords.join(', ')} onChange={handleContentChange}
-                type="text" name="keyword" placeholder="キーワード（カンマ区切り）" required/>
+                type="text" name="keyword" placeholder="キーワード（必須） 例：文法,配列" required/>
 
                 <button>登録</button>
             </form>

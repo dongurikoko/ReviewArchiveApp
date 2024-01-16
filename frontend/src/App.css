@@ -61,6 +61,22 @@ a{
   text-align: center;
 }
 
+.miniTitle{
+  font-size: 2.4rem;
+  margin-top: 3rem;
+  font-weight: 600;
+  line-height: 3rem;
+  margin-bottom: 1.4rem;
+  text-align: center; 
+  font-family:"Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
+}
+
+.code-font {
+  font-family:"Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
+  font-size: 1.8rem;
+}
+
+
 /* Form */
 label{
   font-size: 1.8rem;
@@ -68,7 +84,7 @@ label{
 }
 
 input, textarea{
-  width: 100%;
+  width: 90%;
   padding: 0.5rem;
   margin-bottom: 2rem;
   border: 0.1rem solid #ccc;
@@ -78,9 +94,12 @@ input, textarea{
   font-size: 1.6rem;
   letter-spacing: 0;
   font-family: inherit;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 button{
+  width: 90%;
   background: #858585;
   font-size: 1.6rem;
   color: #fff;
@@ -88,22 +107,25 @@ button{
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
-  width: 100%;
+  margin-top: 1rem;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 button:hover{
   opacity: 0.8;
-  background: linear-gradient(135deg,#63A1FF,#73FF92);
+  background: black;
 }
 
 /* Header */
 .header {
     position: relative;
+    text-align: center; 
 }
 
 .header img {
     width: 100%; /* 画像のサイズ調整 */
-    height: auto;
+    height: auto; /* 画像のサイズ調整 */
 }
 .navList {
     list-style: none; /* 箇条書きの点を消す */
@@ -114,13 +136,15 @@ button:hover{
 .navLink {
     position: absolute;
     bottom: 10%;
-    left: 80%; 
+    left: 85%; 
     display: inline-block;
     background-color: white;
     /*color: #e386e3; テキストの色 */
     padding: 8px 15px; /* 上下と左右のパディング */
     text-align: center;
     text-decoration: none; /* 下線を消す */
+    font-weight: 800; /* 太字 */
+    font-family: Impact, sans-serif; /* フォント */
     border-radius: 5px; /* 角を丸くする */
     transition: background-color 0.3s; /* ホバー時のアニメーション効果 */
 }
