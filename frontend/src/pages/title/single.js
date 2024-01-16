@@ -37,8 +37,8 @@ const Single = () => {
             {singleContent && ( 
                 <>   
                 <h1>{singleContent.title}</h1>
-                <h2>{singleContent.before_code}</h2>
-                <h2>{singleContent.after_code}</h2>
+                <pre><code>{singleContent.before_code.split('  ').join('\n')}</code></pre>
+                <pre><code>{singleContent.after_code.split('  ').join('\n')}</code></pre>
                 <h2>{singleContent.review}</h2>
                 <h2>{singleContent.memo}</h2>
                 {singleContent.keywords && singleContent.keywords.map((keyword, index) => (
