@@ -54,14 +54,14 @@ const Create = () => {
             <form onSubmit={handleSubmit}>
                 <input value={newContent.title} onChange={handleContentChange} 
                 type="text" name="title" placeholder="タイトル" required/>
-                <input value={newContent.before_code} onChange={handleContentChange}
-                type="text" name="before_code" placeholder="修正前コード"/>
-                <input value={newContent.after_code} onChange={handleContentChange}
-                type="text" name="after_code" placeholder="修正後コード"/>
-                <input value={newContent.review} onChange={handleContentChange}
-                type="text" name="review" placeholder="レビュー"/>
-                <input value={newContent.memo} onChange={handleContentChange}
-                type="text" name="memo" placeholder="メモ"/>
+                <textarea value={newContent.before_code} onChange={handleContentChange}
+                type="text" name="before_code" placeholder="修正前コード" rows="4"/>
+                <textarea value={newContent.after_code} onChange={handleContentChange}
+                type="text" name="after_code" placeholder="修正後コード" rows="4"/>
+                <textarea value={newContent.review} onChange={handleContentChange}
+                type="text" name="review" placeholder="レビュー" rows="4"/>
+                <textarea value={newContent.memo} onChange={handleContentChange}
+                type="text" name="memo" placeholder="メモ" rows="4"/>
                 <input value={newContent.keywords.join(', ')} onChange={handleContentChange}
                 type="text" name="keyword" placeholder="キーワード（カンマ区切り）" required/>
 

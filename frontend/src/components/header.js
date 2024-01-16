@@ -7,7 +7,7 @@ const Header = () => {
             <div><Link to="/"><img src={headerImage} alt="header"/></Link></div>
             <nav>
                 <ul className="navList">
-                    <li className="navLink"><Link to="/create">レビュー新規作成</Link></li>
+                    <li className="navLink"><Link to="/content/new">レビュー新規作成</Link></li>
                 </ul>
             </nav>
         </header>
