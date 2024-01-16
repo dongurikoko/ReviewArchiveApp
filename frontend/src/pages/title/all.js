@@ -20,15 +20,17 @@ const All = () => {
 
     return(
         <div>
-           <div>
+           <div className="btn-container">
             {allContents && allContents.contents.map((content) => 
                 <div key={content.content_id}>
-                    <Link to ={`/contents/${content.content_id}`}>
-                    <h1>{content.title}</h1>
-                    </Link>
+                    <Link to ={`/contents/${content.content_id}`} className="btn btn-border-shadow btn-border-shadow--color"><span>
+                    <h1 style={{ marginTop: '10px',marginBottom: '10px'}}>{content.title}</h1>
+                    <h3>---- キーワード ----</h3>
                     {content.keywords && content.keywords.map((keyword, index) => (
-                    <h2 key={index}>{keyword}</h2>
+                    <h3 key={index}>{keyword}</h3>
                     ))}
+                    </span>
+                    </Link>
                     </div>
             )}
             </div>

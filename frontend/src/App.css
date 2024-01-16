@@ -74,6 +74,32 @@ a{
 .code-font {
   font-family:"Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
   font-size: 1.8rem;
+  width: 100%;
+  height: auto;
+}
+
+.code-box{
+  position: relative;
+  margin: 2em 0;
+  padding: 0.5em 1em;
+  border: solid 3px #dd8888;
+  width:80%;
+  margin-left: 10%;
+}
+
+.code-box-title{
+  position: absolute;
+    display: inline-block;
+    top: -27px;
+    left: -3px;
+    padding: 0 9px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 17px;
+    background: #dd8888;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 5px 5px 0 0;
 }
 
 
@@ -98,7 +124,7 @@ input, textarea{
   margin-right: 5%;
 }
 
-button{
+.register-button{
   width: 90%;
   background: #858585;
   font-size: 1.6rem;
@@ -112,7 +138,7 @@ button{
   margin-right: 5%;
 }
 
-button:hover{
+.register-button:hover{
   opacity: 0.8;
   background: black;
 }
@@ -317,4 +343,80 @@ button:hover{
 footer{
   text-align: center;
   margin: 3rem 0;
+}
+
+/* button design */
+
+.btn-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px; /* ボタン間の隙間 */
+}
+
+.btn,
+a.btn,
+button.btn {
+  margin-top: 10%;
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 280px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.5;
+  position: relative;
+  display: inline-block;
+  padding: 5rem 5rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  color: #212529;
+  border-radius: 0.5rem;
+}
+
+a.btn-border-shadow {
+  padding: calc(1.5rem - 12px) 3rem 1.5rem;
+
+  background: #e2c6e2;
+}
+
+a.btn-border-shadow:before {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+
+  width: 100%;
+  height: 100%;
+
+  content: "";
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+
+  border: 3px solid #000;
+  border-radius: 0.5rem;
+}
+
+a.btn-border-shadow:hover {
+  padding: calc(1.5rem - 6px) 3rem;
+}
+
+a.btn-border-shadow:hover:before {
+  top: 0;
+  left: 0;
+}
+
+a.btn-border-shadow--color {
+  border-radius: 0;
+  background: rgb(239, 213, 243);
+}
+
+a.btn-border-shadow--color:before {
+  border-radius: 0;
 }

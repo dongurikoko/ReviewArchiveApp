@@ -65,7 +65,7 @@ const Create = () => {
                 <input value={newContent.keywords.join(', ')} onChange={handleContentChange}
                 type="text" name="keyword" placeholder="キーワード（必須） 例：文法,配列" required/>
 
-                <button>登録</button>
+                <button class="register-button">登録</button>
             </form>
         </div>
     )
