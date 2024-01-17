@@ -76,31 +76,88 @@ a{
   font-size: 1.8rem;
   width: 100%;
   height: auto;
+  padding: 20px 0px 0px 40px;
 }
 
 .code-box{
-  position: relative;
   margin: 2em 0;
-  padding: 0.5em 1em;
-  border: solid 3px #dd8888;
+  background: #f1f1f1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22);
   width:80%;
+  margin-left: 10%;
+  padding:0em 2em 2em 2em;
+}
+
+.code-box-title1{
+    font-size: 1.2em;
+    background: #c75365;
+    padding: 3px;
+    text-align: center;
+    color: #FFF;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+}
+
+.code-box-title2{
+  font-size: 1.2em;
+  background: #95d98e;
+  padding: 3px;
+  text-align: center;
+  color: #FFF;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+.memo-box{
+  margin: 1em auto;
+	position: relative;
+	background: #eee; /*背景色*/
+	padding: 2em 1em 2em 1em; 
+  width:80%;
+  text-align: center;
+  font-size:1.4em;
   margin-left: 10%;
 }
 
-.code-box-title{
+.memo-box::before{
   position: absolute;
-    display: inline-block;
-    top: -27px;
-    left: -3px;
-    padding: 0 9px;
-    height: 25px;
-    line-height: 25px;
-    font-size: 17px;
-    background: #dd8888;
-    color: #ffffff;
-    font-weight: bold;
-    border-radius: 5px 5px 0 0;
+	content: "";
+	width: 95%;
+	height: auto;
+	top: 0.5em;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0 auto;
+	border-top: dotted 10px #fff; 
 }
+
+.review-box{
+  margin: 2.5em 10% 0em 10%; /* ボックスの余白 */
+	background-color: #fbfafa; /* ボックス背景色 */
+	padding:2.5em 2em 2em; /* ボックス内側余白 */
+	position:relative;
+  width: 78%;
+  border: 1px solid #909792;
+  font-family:"Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
+  font-size: 1.4rem;
+}
+
+.review-box .review-box-title{
+  background-color: rgba(244, 7, 244, 0.2);/* テープ背景色と透過*/
+	border-left: 2px dotted rgba(0,0,0,.1);/* テープのギザギザ左*/
+	border-right: 2px dotted rgba(0,0,0,.1);/* テープのギザギザ右*/
+	box-shadow: 0 0 5px rgba(0,0,0,0.2); /*テープ影*/
+	transform: rotate(-2deg);/*テープの傾き*/
+	font-size: 1em;/*タイトル文字の大きさ*/
+	color: #666; /*タイトル文字色 */
+	padding: 10px 20px;/*タイトルの余白*/
+	line-height: 1;/*タイトルの行の高さ*/
+	position:absolute;/*配置(ここを動かす)*/
+	top: -15px; /*上から（-10px）移動*/
+	left: 20px; /*左から(20px)移動*/
+}
+
 
 
 /* Form */
@@ -419,4 +476,17 @@ a.btn-border-shadow--color {
 
 a.btn-border-shadow--color:before {
   border-radius: 0;
+}
+
+.keyword-container{
+  display: inline-block; 
+  margin-right: 10px;
+  font-size: 2.5rem;
+  text-align: center; /* テキストを中央に配置 */
+  width: 100%;
+}
+.keyword-container .keyword{
+  display: inline-block; 
+  margin-left: 10px;
+  font-size: 2.5rem;
 }
