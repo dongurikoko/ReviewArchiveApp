@@ -1,10 +1,12 @@
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import { useEffect,useState } from 'react';
 
 
 
 const Delete = () => {
     const params = useParams()
+
+    const navigate = useNavigate()
 
     const [deleteContent, setDeleteContent] = useState({
         content_id: "",
@@ -50,7 +52,8 @@ const Delete = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        try{
+        if(window.confirm("本当に削除しますか？")){
+            try{
             const response = await fetch(`http://localhost:8080/content/delete/${params.id}`,{
                 method: "DELETE",
                 headers: {
@@ -63,8 +66,11 @@ const Delete = () => {
             console.log (jsonResponse)
             alert(jsonResponse.message)
 
-        }catch(err){
-            alert("削除失敗")
+            navigate("/")
+
+            }catch(err){
+                alert("削除失敗")
+            }
         }
     }
     

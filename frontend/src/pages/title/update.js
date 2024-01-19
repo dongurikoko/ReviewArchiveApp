@@ -1,10 +1,12 @@
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import { useEffect,useState } from 'react';
 
 
 
 const UpdateItem = () => {
     const params = useParams()
+
+    const navigate = useNavigate()
 
     const [updateContent, setUpdateContent] = useState({
         content_id: "",
@@ -63,6 +65,8 @@ const UpdateItem = () => {
             const jsonResponse = await response.json()
             console.log (jsonResponse)
             alert(jsonResponse.message)
+
+            navigate("/")
 
         }catch(err){
             alert("編集失敗")

@@ -1,6 +1,9 @@
 import {useState} from "react";
+import { useNavigate } from "react-router-dom";
 
 const Create = () => {
+
+    const navigate = useNavigate()
 
     const [newContent, setNewContent] = useState({
         title: "",
@@ -43,6 +46,8 @@ const Create = () => {
             const jsonResponse = await response.json()
             console.log (jsonResponse)
             alert(jsonResponse.message)
+
+            navigate("/")
 
         }catch(err){
             alert("コンテンツ登録失敗")
