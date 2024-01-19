@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useEffect,useState } from 'react';
+import {Link} from 'react-router-dom';
 
 
 
@@ -36,14 +37,40 @@ const Single = () => {
         <div> 
             {singleContent && ( 
                 <>   
-                <h1>{singleContent.title}</h1>
-                <pre><code>{singleContent.before_code.split('  ').join('\n')}</code></pre>
-                <pre><code>{singleContent.after_code.split('  ').join('\n')}</code></pre>
-                <h2>{singleContent.review}</h2>
-                <h2>{singleContent.memo}</h2>
+                <div className="miniTitle">{singleContent.title}</div>
+                {singleContent && singleContent.before_code ? (
+                <div className="code-box">
+                    <span className="code-box-title1">修正前コード</span>
+                    <pre><code className="code-font">{singleContent.before_code.split('  ').join('\n')}</code></pre>
+                </div>
+                ) : null}
+                {singleContent && singleContent.after_code ? (
+                    <div className="code-box">
+                    <span className="code-box-title2">修正後コード</span>
+                    <pre><code className="code-font">{singleContent.after_code.split('  ').join('\n')}</code></pre>
+                </div>
+                ) : null}
+                {singleContent && singleContent.review ? (
+                    <div class="review-box">
+                    <div class="review-box-title">REVIEW</div>
+                   {singleContent.review}</div>
+                ) : null}
+                {singleContent && singleContent.memo ? (
+                    <div className="memo-box">
+                    ---- MEMO ---- <br/><br/>
+                    {singleContent.memo}
+                    </div>
+                ) : null}
+                <div className="keyword-container">
+                キーワード: 
                 {singleContent.keywords && singleContent.keywords.map((keyword, index) => (
-                    <h2 key={index}>{keyword}</h2>
+                    <h2 key={index} className="keyword">#{keyword}</h2>
                 ))}
+                </div>
+                <div className='button-container12'>
+                    <Link to={`/content/update/${singleContent.content_id}`} className="content-button1">編集</Link>
+                    <Link to={`/content/delete/${singleContent.content_id}`} className="content-button2">削除</Link>
+                </div>
                 </>
             )}
         </div>

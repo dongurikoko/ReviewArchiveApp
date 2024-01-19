@@ -61,6 +61,105 @@ a{
   text-align: center;
 }
 
+.miniTitle{
+  font-size: 2.4rem;
+  margin-top: 3rem;
+  font-weight: 600;
+  line-height: 3rem;
+  margin-bottom: 1.4rem;
+  text-align: center; 
+  font-family:"Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
+}
+
+.code-font {
+  font-family:"Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
+  font-size: 1.8rem;
+  width: 100%;
+  height: auto;
+  padding: 20px 0px 0px 40px;
+}
+
+.code-box{
+  margin: 2em 0;
+  background: #f1f1f1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22);
+  width:80%;
+  margin-left: 10%;
+  padding:0em 2em 2em 2em;
+}
+
+.code-box-title1{
+    font-size: 1.2em;
+    background: #c75365;
+    padding: 3px;
+    text-align: center;
+    color: #FFF;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+}
+
+.code-box-title2{
+  font-size: 1.2em;
+  background: #95d98e;
+  padding: 3px;
+  text-align: center;
+  color: #FFF;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+.memo-box{
+  margin: 1em auto;
+	position: relative;
+	background: #eee; /*背景色*/
+	padding: 2em 1em 2em 1em; 
+  width:80%;
+  text-align: center;
+  font-size:1.4em;
+  margin-left: 10%;
+}
+
+.memo-box::before{
+  position: absolute;
+	content: "";
+	width: 95%;
+	height: auto;
+	top: 0.5em;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0 auto;
+	border-top: dotted 10px #fff; 
+}
+
+.review-box{
+  margin: 2.5em 10% 0em 10%; /* ボックスの余白 */
+	background-color: #fbfafa; /* ボックス背景色 */
+	padding:2.5em 2em 2em; /* ボックス内側余白 */
+	position:relative;
+  width: 78%;
+  border: 1px solid #909792;
+  font-family:"Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
+  font-size: 1.4rem;
+}
+
+.review-box .review-box-title{
+  background-color: rgba(244, 7, 244, 0.2);/* テープ背景色と透過*/
+	border-left: 2px dotted rgba(0,0,0,.1);/* テープのギザギザ左*/
+	border-right: 2px dotted rgba(0,0,0,.1);/* テープのギザギザ右*/
+	box-shadow: 0 0 5px rgba(0,0,0,0.2); /*テープ影*/
+	transform: rotate(-2deg);/*テープの傾き*/
+	font-size: 1em;/*タイトル文字の大きさ*/
+	color: #666; /*タイトル文字色 */
+	padding: 10px 20px;/*タイトルの余白*/
+	line-height: 1;/*タイトルの行の高さ*/
+	position:absolute;/*配置(ここを動かす)*/
+	top: -15px; /*上から（-10px）移動*/
+	left: 20px; /*左から(20px)移動*/
+}
+
+
+
 /* Form */
 label{
   font-size: 1.8rem;
@@ -68,7 +167,7 @@ label{
 }
 
 input, textarea{
-  width: 100%;
+  width: 90%;
   padding: 0.5rem;
   margin-bottom: 2rem;
   border: 0.1rem solid #ccc;
@@ -78,9 +177,12 @@ input, textarea{
   font-size: 1.6rem;
   letter-spacing: 0;
   font-family: inherit;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
-button{
+.register-button{
+  width: 90%;
   background: #858585;
   font-size: 1.6rem;
   color: #fff;
@@ -88,22 +190,82 @@ button{
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
-  width: 100%;
+  margin-top: 1rem;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
-button:hover{
+.register-button:hover{
   opacity: 0.8;
-  background: linear-gradient(135deg,#63A1FF,#73FF92);
+  background: black;
+}
+
+.delete-button{
+  width: 70%;
+  background: #858585;
+  font-size: 1.6rem;
+  color: #fff;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 3rem;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+.delete-button:hover{
+  opacity: 0.8;
+  background: black;
+}
+
+.button-container12 {
+  display: flex;
+  justify-content: flex-start; /* ボタン間のスペースを調整 */
+}
+
+.content-button1{
+  width: 15%;
+  background: #858585;
+  font-size: 1.6rem;
+  color: #fff;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 5rem;
+  margin-left: 34%;
+  text-align: center;
+}
+
+.content-button2{
+  width: 15%;
+  background: #858585;
+  font-size: 1.6rem;
+  color: #fff;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 5rem;
+  margin-left: 2%;
+  text-align: center;
+}
+
+.content-button1:hover,.content-button2:hover{
+  opacity: 0.8;
+  background: black;
 }
 
 /* Header */
 .header {
     position: relative;
+    text-align: center; 
 }
 
 .header img {
     width: 100%; /* 画像のサイズ調整 */
-    height: auto;
+    height: auto; /* 画像のサイズ調整 */
 }
 .navList {
     list-style: none; /* 箇条書きの点を消す */
@@ -114,13 +276,15 @@ button:hover{
 .navLink {
     position: absolute;
     bottom: 10%;
-    left: 80%; 
+    left: 85%; 
     display: inline-block;
     background-color: white;
     /*color: #e386e3; テキストの色 */
     padding: 8px 15px; /* 上下と左右のパディング */
     text-align: center;
     text-decoration: none; /* 下線を消す */
+    font-weight: 800; /* 太字 */
+    font-family: Impact, sans-serif; /* フォント */
     border-radius: 5px; /* 角を丸くする */
     transition: background-color 0.3s; /* ホバー時のアニメーション効果 */
 }
@@ -293,4 +457,93 @@ button:hover{
 footer{
   text-align: center;
   margin: 3rem 0;
+}
+
+/* button design */
+
+.btn-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px; /* ボタン間の隙間 */
+}
+
+.btn,
+a.btn,
+button.btn {
+  margin-top: 10%;
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 280px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.5;
+  position: relative;
+  display: inline-block;
+  padding: 5rem 5rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  color: #212529;
+  border-radius: 0.5rem;
+}
+
+a.btn-border-shadow {
+  padding: calc(1.5rem - 12px) 3rem 1.5rem;
+
+  background: #e2c6e2;
+}
+
+a.btn-border-shadow:before {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+
+  width: 100%;
+  height: 100%;
+
+  content: "";
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+
+  border: 3px solid #000;
+  border-radius: 0.5rem;
+}
+
+a.btn-border-shadow:hover {
+  padding: calc(1.5rem - 6px) 3rem;
+}
+
+a.btn-border-shadow:hover:before {
+  top: 0;
+  left: 0;
+}
+
+a.btn-border-shadow--color {
+  border-radius: 0;
+  background: rgb(239, 213, 243);
+}
+
+a.btn-border-shadow--color:before {
+  border-radius: 0;
+}
+
+.keyword-container{
+  display: inline-block; 
+  margin-right: 10px;
+  font-size: 2.5rem;
+  text-align: center; /* テキストを中央に配置 */
+  width: 100%;
+}
+.keyword-container .keyword{
+  display: inline-block; 
+  margin-left: 10px;
+  font-size: 2.5rem;
 }
