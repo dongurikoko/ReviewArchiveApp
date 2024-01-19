@@ -5,6 +5,8 @@ import Create from './pages/title/create';
 import Single from './pages/title/single';
 import Header from './components/header';
 import Footer from './components/footer';
+import Update from "./pages/title/update";
+import Delete from "./pages/title/delete";
 import './App.css';
 
 
@@ -17,6 +19,8 @@ const App = () => {
         <Route path="/" element={<All />} />
         <Route path="/contents/:id" element={<Single />} />
         <Route path="/content/new" element={<Create />} />
+        <Route path="/content/update/:id" element={<Update />} />
+        <Route path="/content/delete/:id" element={<Delete />} />
       </Routes>
       <Footer />
       </div>

@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useEffect,useState } from 'react';
+import {Link} from 'react-router-dom'
 
 
 
@@ -65,6 +66,10 @@ const Single = () => {
                 {singleContent.keywords && singleContent.keywords.map((keyword, index) => (
                     <h2 key={index} className="keyword">#{keyword}</h2>
                 ))}
+                </div>
+                <div className='button-container12'>
+                    <Link to={`/content/update/${singleContent.content_id}`} className="content-button1">編集</Link>
+                    <Link to={`/content/delete/${singleContent.content_id}`} className="content-button2">削除</Link>
                 </div>
                 </>
             )}

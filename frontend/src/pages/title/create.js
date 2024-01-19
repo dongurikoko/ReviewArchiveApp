@@ -45,7 +45,7 @@ const Create = () => {
             alert(jsonResponse.message)
 
         }catch(err){
-            alert("ユーザー登録失敗")
+            alert("コンテンツ登録失敗")
         }
     }
     return(

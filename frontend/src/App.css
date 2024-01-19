@@ -200,6 +200,63 @@ input, textarea{
   background: black;
 }
 
+.delete-button{
+  width: 70%;
+  background: #858585;
+  font-size: 1.6rem;
+  color: #fff;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 3rem;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+.delete-button:hover{
+  opacity: 0.8;
+  background: black;
+}
+
+.button-container12 {
+  display: flex;
+  justify-content: flex-start; /* ボタン間のスペースを調整 */
+}
+
+.content-button1{
+  width: 15%;
+  background: #858585;
+  font-size: 1.6rem;
+  color: #fff;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 5rem;
+  margin-left: 34%;
+  text-align: center;
+}
+
+.content-button2{
+  width: 15%;
+  background: #858585;
+  font-size: 1.6rem;
+  color: #fff;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 5rem;
+  margin-left: 2%;
+  text-align: center;
+}
+
+.content-button1:hover,.content-button2:hover{
+  opacity: 0.8;
+  background: black;
+}
+
 /* Header */
 .header {
     position: relative;
