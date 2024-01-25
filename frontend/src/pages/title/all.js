@@ -21,7 +21,7 @@ const All = () => {
     return(
         <div>
            <div className="btn-container">
-            {allContents && allContents.contents.map((content) => 
+            {allContents && allContents.contents && allContents.contents.map((content) => 
                 <div key={content.content_id}>
                     <Link to ={`/contents/${content.content_id}`} className="btn btn-border-shadow btn-border-shadow--color"><span>
                     <h1 style={{ marginTop: '10px',marginBottom: '10px'}}>{content.title}</h1>
