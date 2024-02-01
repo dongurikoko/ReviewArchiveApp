@@ -3,6 +3,8 @@ package controller
 import (
 	"fmt"
 	"reviewArchive/pkg/server/model"
+
+	"golang.org/x/exp/slices"
 )
 
 type ListResponse struct {
@@ -16,7 +18,7 @@ type ListController struct {
 	KeywordRepository model.KeywordRepositoryInterface
 }
 
-func NewListContoroller(contentRepository model.ContentRepositoryInterface,
+func NewListController(contentRepository model.ContentRepositoryInterface,
 	keywordRepository model.KeywordRepositoryInterface) *ListController {
 	return &ListController{
 		ContentRepository: contentRepository,
@@ -25,12 +27,13 @@ func NewListContoroller(contentRepository model.ContentRepositoryInterface,
 }
 
 type ListControllerInterface interface {
-	ListGet() ([]*ListResponse, error)
-	ListGetByContentID(ID int) (*ContentRequest, error)
+	GetAllContents() ([]*ListResponse, error)
+	GetContentsByContentID(ID int) (*ContentRequest, error)
+	SearchContents(keyword string) ([]*ListResponse, error)
 }
 
 // コンテンツの一覧取得ロジック
-func (c *ListController) ListGet() ([]*ListResponse, error) {
+func (c *ListController) GetAllContents() ([]*ListResponse, error) {
 	// コンテンツテーブルから全てのレコードを取得
 	contentlists, err := c.ContentRepository.SelectContent()
 	if err != nil {
@@ -58,7 +61,7 @@ func (c *ListController) ListGet() ([]*ListResponse, error) {
 }
 
 // 特定のコンテンツの詳細取得ロジック
-func (c *ListController) ListGetByContentID(ID int) (*ContentRequest, error) {
+func (c *ListController) GetContentsByContentID(ID int) (*ContentRequest, error) {
 	// contentテーブルからIDを条件にレコードを取得
 	content, err := c.ContentRepository.SelectContentByContentID(ID)
 
@@ -82,4 +85,39 @@ func (c *ListController) ListGetByContentID(ID int) (*ContentRequest, error) {
 		Memo:        content.Memo,
 		Keywords:    keyword,
 	}, nil
+}
+
+// コンテンツ検索ロジック
+func (c *ListController) SearchContents(keyword string) ([]*ListResponse, error) {
+	// keywordと一致するidを取得
+	contentIDs, err := c.KeywordRepository.SelectIDByContentKeyword(keyword)
+	if err != nil {
+		return nil, fmt.Errorf("failed to SelectIDByContentKeyword in SearchContents: %w", err)
+	}
+	// idの重複を取り除く
+	uniqueContentIDs := slices.Compact(contentIDs)
+
+	var listResponses []*ListResponse
+	for _, uniqueContentID := range uniqueContentIDs {
+		// idをもとにcontentテーブルからレコードを取得
+		content, err := c.ContentRepository.SelectContentByContentID(uniqueContentID)
+		if err != nil {
+			return nil, fmt.Errorf("failed to SelectContentByContentID in SearchContents: %w", err)
+		}
+
+		// idを元にキーワードテーブルからレコードを取得
+		keywords, err := c.KeywordRepository.SelectStringKeywordByID(uniqueContentID)
+		if err != nil {
+			return nil, fmt.Errorf("failed to SelectStringKeywordByID in SearchContents: %w", err)
+		}
+		// コンテンツテーブルから取得したレコードとキーワードテーブルから取得したレコードを結合
+		listResponse := &ListResponse{
+			Content_id: uniqueContentID,
+			Title:      content.Title,
+			Keywords:   keywords,
+		}
+		listResponses = append(listResponses, listResponse)
+
+	}
+	return listResponses, nil
 }

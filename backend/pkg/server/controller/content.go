@@ -20,7 +20,7 @@ type ContentController struct {
 	KeywordRepository model.KeywordRepositoryInterface
 }
 
-func NewContentContoroller(contentRepository model.ContentRepositoryInterface,
+func NewContentController(contentRepository model.ContentRepositoryInterface,
 	keywordRepository model.KeywordRepositoryInterface) *ContentController {
 	return &ContentController{
 		ContentRepository: contentRepository,

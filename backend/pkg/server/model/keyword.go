@@ -26,6 +26,7 @@ type KeywordRepositoryInterface interface {
 	DeleteKeywordByID(id int) error
 	SelectKeywordByID(id int) ([]*Keyword, error)
 	SelectStringKeywordByID(id int) ([]string, error)
+	SelectIDByContentKeyword(contentKeyword string) ([]int, error)
 }
 
 // キーワードテーブルに挿入する
@@ -122,4 +123,31 @@ func ConverToString(rows *sql.Rows) ([]string, error) {
 		return nil, fmt.Errorf("error after row iteration in convertTostring: %w", err)
 	}
 	return keywords, nil
+}
+
+// キーワードテーブルからcontentKeywordを条件にidを取得する
+func (r *KeywordRepository) SelectIDByContentKeyword(contentKeyword string) ([]int, error) {
+	rows, err := r.Conn.Query("SELECT id FROM keyword WHERE contentKeyword LIKE ?", "%"+contentKeyword+"%")
+	if err != nil {
+		return nil, fmt.Errorf("failed to SELECT id in SelectIDByContentKeyword: %w", err)
+	}
+	return ConverToInt(rows)
+}
+
+// rowデータを[]intに変換する
+func ConverToInt(rows *sql.Rows) ([]int, error) {
+	defer rows.Close()
+
+	var ids []int
+	for rows.Next() {
+		var id int
+		if err := rows.Scan(&id); err != nil {
+			return nil, fmt.Errorf("failed to Scan in ConverToInt: %w", err)
+		}
+		ids = append(ids, id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error after row iteration in convertToInt: %w", err)
+	}
+	return ids, nil
 }
