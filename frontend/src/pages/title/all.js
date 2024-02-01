@@ -1,10 +1,9 @@
 import {useState,useEffect} from 'react'
 import {Link} from 'react-router-dom'
+import Header from '../../components/header'
 
-
-const All = () => {
+const All = ({ searchTerm, setSearchTerm }) => {
     const[allContents, setAllContents] = useState()
-    const [searchTerm, setSearchTerm] = useState('')
 
     const getAllcontents = async() => {
         const response = await fetch(`http://localhost:8080/list/search?keyword=${searchTerm}`)
@@ -22,13 +21,7 @@ const All = () => {
     },[searchTerm])
 
     return(
-        <div>
-            <input
-                type="text"
-                value={searchTerm}
-                onChange={event => setSearchTerm(event.target.value)}
-            />
-            
+        <div>   
             <div className="btn-container">
             {allContents && allContents.contents && allContents.contents.map((content) => 
                 <div key={content.content_id}>

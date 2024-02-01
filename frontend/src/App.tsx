@@ -8,15 +8,17 @@ import Footer from './components/footer';
 import Update from "./pages/title/update";
 import Delete from "./pages/title/delete";
 import './App.css';
+import { useState } from 'react';
 
 
 const App = () => {
+  const [searchTerm, setSearchTerm] = useState('');
   return(
     <BrowserRouter>
     <div className="container">
-      <Header />
+      <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <Routes>
-        <Route path="/" element={<All />} />
+        <Route path="/" element={<All searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>} />
         <Route path="/contents/:id" element={<Single />} />
         <Route path="/content/new" element={<Create />} />
         <Route path="/content/update/:id" element={<Update />} />
