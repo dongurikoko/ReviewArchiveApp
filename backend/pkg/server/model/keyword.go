@@ -74,7 +74,7 @@ func (r *KeywordRepository) DeleteKeywordByID(id int) error {
 	return nil
 }
 
-// キーワードをidを条件に取得する
+// キーワードをidを条件に取得する(IDとkeywordを返す)
 func (r *KeywordRepository) SelectKeywordByID(id int) ([]*Keyword, error) {
 	rows, err := r.Conn.Query("SELECT * FROM keyword WHERE id = ?", id)
 	if err != nil {

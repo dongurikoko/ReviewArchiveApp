@@ -267,23 +267,30 @@ input, textarea{
     width: 100%; /* 画像のサイズ調整 */
     height: auto; /* 画像のサイズ調整 */
 }
+
+.nav-container {
+    position: absolute;
+    top: 75%;
+    right: 2%;
+    display: flex;
+    justify-content: space-between;
+}
+
 .navList {
-    list-style: none; /* 箇条書きの点を消す */
-    padding: 0; /* デフォルトのパディングを取り除く */
-    margin: 0; /* デフォルトのマージンを取り除く */
+  list-style: none; /* 箇条書きの点を消す */
+  text-align: center;
+  display: flex;
 }
 
 .navLink {
-    position: absolute;
-    bottom: 10%;
-    left: 85%; 
     display: inline-block;
     background-color: white;
+    height: 33%;
     /*color: #e386e3; テキストの色 */
     padding: 8px 15px; /* 上下と左右のパディング */
     text-align: center;
     text-decoration: none; /* 下線を消す */
-    font-weight: 800; /* 太字 */
+    font-weight: 600; /* 太字 */
     font-family: Impact, sans-serif; /* フォント */
     border-radius: 5px; /* 角を丸くする */
     transition: background-color 0.3s; /* ホバー時のアニメーション効果 */
