@@ -35,3 +35,11 @@ frontendフォルダ下で以下を行う。
 
 react起動
 `npm start`)
+
+## 動作
+動作はこんな感じ(デザインには目を瞑っていただけると...)
+
+
+https://github.com/dongurikoko/ReviewArchiveApp/assets/108347471/d176c015-c60f-48ec-8f34-4308ccca51d6
+
+
