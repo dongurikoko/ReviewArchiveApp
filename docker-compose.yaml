@@ -10,7 +10,7 @@ services:
       MYSQL_ROOT_PASSWORD: "review-archive"
       MYSQL_DATABASE: "review_archive_api"
     ports:
-      - "127.0.0.1:3307:3306"
+      - "127.0.0.1:3306:3306"
     volumes:
       - ./backend/db/init:/docker-entrypoint-initdb.d
       - ./backend/db-data:/var/lib/mysql

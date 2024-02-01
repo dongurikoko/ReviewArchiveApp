@@ -1,26 +1,35 @@
 import {useState,useEffect} from 'react'
 import {Link} from 'react-router-dom'
 
+
 const All = () => {
     const[allContents, setAllContents] = useState()
+    const [searchTerm, setSearchTerm] = useState('')
+
     const getAllcontents = async() => {
-        const response = await fetch('http://localhost:8080/list/get')
+        const response = await fetch(`http://localhost:8080/list/search?keyword=${searchTerm}`)
         const jsonResponse = await response.json()
         setAllContents(jsonResponse)
     }
 
     useEffect(() => {
         const getAllcontents = async() => {
-            const response = await fetch('http://localhost:8080/list/get')
+            const response = await fetch(`http://localhost:8080/list/search?keyword=${searchTerm}`)
             const jsonResponse = await response.json()
             setAllContents(jsonResponse)
         }
         getAllcontents()
-    },[])
+    },[searchTerm])
 
     return(
         <div>
-           <div className="btn-container">
+            <input
+                type="text"
+                value={searchTerm}
+                onChange={event => setSearchTerm(event.target.value)}
+            />
+            
+            <div className="btn-container">
             {allContents && allContents.contents && allContents.contents.map((content) => 
                 <div key={content.content_id}>
                     <Link to ={`/contents/${content.content_id}`} className="btn btn-border-shadow btn-border-shadow--color"><span>
