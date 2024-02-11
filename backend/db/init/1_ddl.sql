@@ -19,13 +19,15 @@ SET CHARSET utf8mb4;
 -- Table `review_archive_api`.`content`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `review_archive_api`.`content`(
+  `user_id` INT NOT NULL COMMENT 'ユーザーID',
   `content_id` INT NOT NULL AUTO_INCREMENT COMMENT 'コンテンツID',
   `title` VARCHAR(255) NOT NULL COMMENT 'タイトル名',
   `before_code` TEXT  COMMENT '修正前コード',
   `after_code` TEXT  COMMENT '修正後コード',
   `review` TEXT  COMMENT 'レビュー内容',
   `memo` TEXT  COMMENT 'メモ',
-  PRIMARY KEY (`content_id`))
+  PRIMARY KEY (`content_id`),
+  FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE)
 ENGINE = InnoDB
 COMMENT = 'コンテンツ';
 
@@ -44,6 +46,18 @@ CREATE TABLE IF NOT EXISTS `review_archive_api`.`keyword` (
     ON UPDATE NO ACTION) 
 ENGINE=InnoDB
 COMMENT = 'キーワード';
+
+-- -----------------------------------------------------
+-- Table `review_archive_api`.`users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `review_archive_api`.`users` (
+  `user_id` INT NOT NULL AUTO_INCREMENT COMMENT 'ユーザID',
+  `username` VARCHAR(255) NOT NULL COMMENT 'ユーザ名',
+  `password` VARCHAR(255) NOT NULL COMMENT 'パスワード',
+  `email` VARCHAR(255) NOT NULL UNIQUE COMMENT 'メールアドレス',
+  PRIMARY KEY (`user_id`))
+ENGINE=InnoDB
+COMMENT = 'ユーザ';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

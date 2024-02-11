@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"reviewArchive/pkg/db"
+	"reviewArchive/pkg/middleware"
 	"reviewArchive/pkg/server/controller"
 	"reviewArchive/pkg/server/handler"
 	"reviewArchive/pkg/server/model"
@@ -15,8 +16,8 @@ import (
 var (
 	sqlDB, _ = db.GetConn()
 
-	//userRepository = model.NewUserRepository(sqlDB) //userテーブルの部分
-	//authMiddleware = middleware.NewMiddleware(userRepository)
+	userRepository = model.NewUserRepository(sqlDB)
+	authMiddleware = middleware.NewMiddleware(userRepository)
 
 	contentRepository = model.NewContentRepository(sqlDB)
 	keywordRepository = model.NewKeywordRepository(sqlDB)
@@ -26,6 +27,7 @@ var (
 
 	contentHandler = handler.NewContentHandler(contentController)
 	listHandler    = handler.NewListHandler(listController)
+	userHandler    = handler.NewUserHandler(userRepository)
 )
 
 // Serve HTTPサーバを起動する
@@ -43,12 +45,18 @@ func Serve(addr string) {
 
 	/* ===== URLマッピングを行う ===== */
 	// 認証を必要としないAPI
-	e.POST("/content/create", contentHandler.HandleContentCreate())
-	e.POST("/content/update/:content_id", contentHandler.HandleContentUpdate())
-	e.DELETE("/content/delete/:content_id", contentHandler.HandleContentDelete())
-	e.GET("/list/get", listHandler.HandleListGet())
-	e.GET("/list/get/:content_id", listHandler.HandleListGetByContentID())
-	e.GET("/list/search", listHandler.HandleListSearch())
+	e.POST("/signup", userHandler.HandleUserCreate())
+	e.POST("/login", userHandler.HandleUserLogin())
+
+	// 認証を必要とするAPI
+	authAPI := e.Group("", authMiddleware.AuthenticateMiddleware())
+	authAPI.GET("user/get", userHandler.HandleUserGet())
+	authAPI.POST("/content/create", contentHandler.HandleContentCreate())
+	authAPI.POST("/content/update/:content_id", contentHandler.HandleContentUpdate())
+	authAPI.DELETE("/content/delete/:content_id", contentHandler.HandleContentDelete())
+	authAPI.GET("/list/get", listHandler.HandleListGet())
+	authAPI.GET("/list/get/:content_id", listHandler.HandleListGetByContentID())
+	authAPI.GET("/list/search", listHandler.HandleListSearch())
 
 	/* ===== サーバの起動 ===== */
 	log.Println("Server running...")
