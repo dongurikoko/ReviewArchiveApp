@@ -52,9 +52,9 @@ COMMENT = 'キーワード';
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `review_archive_api`.`users` (
   `user_id` INT NOT NULL AUTO_INCREMENT COMMENT 'ユーザID',
-  `username` VARCHAR(255) NOT NULL COMMENT 'ユーザ名',
+  `username` VARCHAR(255) NOT NULL UNIQUE COMMENT 'ユーザ名',
   `password` VARCHAR(255) NOT NULL COMMENT 'パスワード',
-  `email` VARCHAR(255) NOT NULL UNIQUE COMMENT 'メールアドレス',
+  `email` VARCHAR(255) NOT NULL  COMMENT 'メールアドレス',
   PRIMARY KEY (`user_id`))
 ENGINE=InnoDB
 COMMENT = 'ユーザ';

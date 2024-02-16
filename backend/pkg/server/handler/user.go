@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"reviewArchive/pkg/auth"
 	"reviewArchive/pkg/server/model"
 
 	"github.com/labstack/echo/v4"
@@ -87,6 +88,7 @@ func (h *UserHandler) HandleUserLogin() echo.HandlerFunc {
 		log.Println("login success: username = ", req.UserName)
 
 		//JWT認証を用いて認証トークンを生成
+		token, err := auth.GetTokenHandler(user)
 
 	}
 }
