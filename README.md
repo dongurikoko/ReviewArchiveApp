@@ -11,7 +11,6 @@ npm install react-router-dom
 
 ### 起動
 `docker compose up`
-(backendが最初立ち上げに毎回失敗するため直す必要あり)
 
 ブラウザで"http://localhost:3000/"
 にアクセス
