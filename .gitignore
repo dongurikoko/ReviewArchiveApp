@@ -1,0 +1,4 @@
+# .envファイル
+.env
+
+/backend/db-data
