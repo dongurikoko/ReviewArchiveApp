@@ -51,6 +51,8 @@ services:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
       MYSQL_DATABASE: review_archive_api
+    depends_on:
+        - mysql
 volumes:
   db-data:
     driver: local
