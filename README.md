@@ -7,7 +7,7 @@ frontend側の構造
 App.tsx → index.tsx → index.html → ブラウザ
 
 ### 起動
-`docker compose up`
+`docker-compose up`
 
 ブラウザで"http://localhost:3000/"
 にアクセス
