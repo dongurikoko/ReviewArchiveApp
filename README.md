@@ -6,9 +6,6 @@ https://kindhearted-roast-aac.notion.site/github-28e72a6593e0407e9c38430cfd8f9ec
 frontend側の構造
 App.tsx → index.tsx → index.html → ブラウザ
 
-### install
-npm install react-router-dom
-
 ### 起動
 `docker compose up`
 
