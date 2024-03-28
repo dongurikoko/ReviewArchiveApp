@@ -19,14 +19,14 @@ const UpdateItem = () => {
     })
 
     const getUpdateContent = async () => {
-        const response = await fetch(`http://localhost:8080/list/get/${params.id}`)
+        const response = await fetch(`http://localhost:8080/lists/${params.id}`)
         const jsonResponse = await response.json()
         setUpdateContent(jsonResponse)
     }
 
     useEffect(() => {
         const getUpdateContent = async () => {
-            const response = await fetch(`http://localhost:8080/list/get/${params.id}`)
+            const response = await fetch(`http://localhost:8080/lists/${params.id}`)
             const jsonResponse = await response.json()
             setUpdateContent(jsonResponse)
         }
@@ -53,7 +53,7 @@ const UpdateItem = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         try{
-            const response = await fetch(`http://localhost:8080/content/update/${params.id}`,{
+            const response = await fetch(`http://localhost:8080/contents/${params.id}`,{
                 method: "POST",
                 headers: {
                     "Accept": "application/json",

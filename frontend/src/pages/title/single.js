@@ -18,14 +18,14 @@ const Single = () => {
     })
 
     const getSingleContent = async () => {
-        const response = await fetch(`http://localhost:8080/list/get/${params.id}`)
+        const response = await fetch(`http://localhost:8080/lists/${params.id}`)
         const jsonResponse = await response.json()
         setSingleContent(jsonResponse)
     }
 
     useEffect(() => {
         const getSingleContent = async () => {
-            const response = await fetch(`http://localhost:8080/list/get/${params.id}`)
+            const response = await fetch(`http://localhost:8080/lists/${params.id}`)
             const jsonResponse = await response.json()
             setSingleContent(jsonResponse)
         }

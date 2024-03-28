@@ -34,7 +34,7 @@ const Create = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         try{
-            const response = await fetch("http://localhost:8080/content/create",{
+            const response = await fetch("http://localhost:8080/contents",{
                 method: "POST",
                 headers: {
                     "Accept": "application/json",

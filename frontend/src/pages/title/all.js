@@ -6,14 +6,14 @@ const All = ({ searchTerm, setSearchTerm }) => {
     const[allContents, setAllContents] = useState()
 
     const getAllcontents = async() => {
-        const response = await fetch(`http://localhost:8080/list/search?keyword=${searchTerm}`)
+        const response = await fetch(`http://localhost:8080/lists/search?keyword=${searchTerm}`)
         const jsonResponse = await response.json()
         setAllContents(jsonResponse)
     }
 
     useEffect(() => {
         const getAllcontents = async() => {
-            const response = await fetch(`http://localhost:8080/list/search?keyword=${searchTerm}`)
+            const response = await fetch(`http://localhost:8080/lists/search?keyword=${searchTerm}`)
             const jsonResponse = await response.json()
             setAllContents(jsonResponse)
         }

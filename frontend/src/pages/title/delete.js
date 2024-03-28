@@ -19,14 +19,14 @@ const Delete = () => {
     })
 
     const getDeleteContent = async () => {
-        const response = await fetch(`http://localhost:8080/list/get/${params.id}`)
+        const response = await fetch(`http://localhost:8080/lists/${params.id}`)
         const jsonResponse = await response.json()
         setDeleteContent(jsonResponse)
     }
 
     useEffect(() => {
         const getDeleteContent = async () => {
-            const response = await fetch(`http://localhost:8080/list/get/${params.id}`)
+            const response = await fetch(`http://localhost:8080/lists/${params.id}`)
             const jsonResponse = await response.json()
             setDeleteContent(jsonResponse)
         }
@@ -54,7 +54,7 @@ const Delete = () => {
         e.preventDefault();
         if(window.confirm("本当に削除しますか？")){
             try{
-            const response = await fetch(`http://localhost:8080/content/delete/${params.id}`,{
+            const response = await fetch(`http://localhost:8080/contents/${params.id}`,{
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json",
