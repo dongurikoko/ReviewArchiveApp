@@ -43,12 +43,12 @@ func Serve(addr string) {
 
 	/* ===== URLマッピングを行う ===== */
 	// 認証を必要としないAPI
-	e.POST("/content/create", contentHandler.HandleContentCreate())
-	e.POST("/content/update/:content_id", contentHandler.HandleContentUpdate())
-	e.DELETE("/content/delete/:content_id", contentHandler.HandleContentDelete())
-	e.GET("/list/get", listHandler.HandleListGet())
-	e.GET("/list/get/:content_id", listHandler.HandleListGetByContentID())
-	e.GET("/list/search", listHandler.HandleListSearch())
+	e.POST("/contents", contentHandler.HandleContentCreate())
+	e.POST("/contents/:content_id", contentHandler.HandleContentUpdate())
+	e.DELETE("/contents/:content_id", contentHandler.HandleContentDelete())
+	e.GET("/lists", listHandler.HandleListGet())
+	e.GET("/lists/:content_id", listHandler.HandleListGetByContentID())
+	e.GET("/lists/search", listHandler.HandleListSearch())
 
 	/* ===== サーバの起動 ===== */
 	log.Println("Server running...")
