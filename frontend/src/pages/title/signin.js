@@ -20,7 +20,7 @@ const SignIn = () => {
                 </div>
                 <input type="submit" value="Submit" />
             </form>
-            <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+            <p>Don't have an account? <a href="/">Sign Up</a></p>
         </div>
     );
 }
