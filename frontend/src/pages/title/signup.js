@@ -49,7 +49,7 @@ const SignUp = () => {
                         />
                     </label>
                 </div>
-                <input type="submit" value="Submit" />
+                <button type="submit" class="register-button">Submit</button>
             </form>
             <p>Already have an account? <a href="/signin">Sign In</a></p>
         </div>

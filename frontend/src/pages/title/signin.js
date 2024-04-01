@@ -18,7 +18,7 @@ const SignIn = () => {
                         <input type="password" name="password" />
                     </label>
                 </div>
-                <input type="submit" value="Submit" />
+                <button type="submit" class="register-button">Submit</button>
             </form>
             <p>Don't have an account? <a href="/">Sign Up</a></p>
         </div>
