@@ -7,6 +7,8 @@ import Header from './components/header';
 import Footer from './components/footer';
 import Update from "./pages/title/update";
 import Delete from "./pages/title/delete";
+import SignIn from './pages/title/signin';
+import SignUp from './pages/title/signup';
 import './App.css';
 import { useState } from 'react';
 
@@ -23,6 +25,8 @@ const App = () => {
         <Route path="/content/new" element={<Create />} />
         <Route path="/content/update/:id" element={<Update />} />
         <Route path="/content/delete/:id" element={<Delete />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
       <Footer />
       </div>
