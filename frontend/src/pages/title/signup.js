@@ -9,19 +9,24 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    // フォーム送信時の処理
+    const handleChangeEmail = (event) => {
+        setEmail(event.target.value);
+    }
+    
+    const handleChangePassword = (event) => {
+        setPassword(event.target.value);
+    }
+    
     const handleSubmit = async (event) => {
-        event.preventDefault(); // フォームのデフォルト送信を阻止
+        event.preventDefault(); // デフォルトのイベントをキャンセル
         try {
-            // Firebaseのサインアップ機能を呼び出し
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            console.log(userCredential); // 成功した場合、ユーザー情報をコンソールに出力
-            // サインアップ後の処理
-            navigate('/signin');
-        } catch (error) {
-            console.error(error); // エラーが発生した場合、コンソールに出力
+            await createUserWithEmailAndPassword(auth, email, password);
+            navigate("/signin"); // サインインページへリダイレクト
+        } catch (err) {
+            alert(err.message); // エラーメッセージをアラート表示
+            console.error(err); // コンソールにエラー出力
         }
-    };
+    }
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -34,7 +39,7 @@ const SignUp = () => {
                             type="email" 
                             name="email" 
                             value={email} // ステートをバインド
-                            onChange={(e) => setEmail(e.target.value)} // 入力値の変更をステートに反映
+                            onChange={handleChangeEmail} // 入力値の変更をステートに反映
                         />
                     </label>
                 </div>
@@ -45,7 +50,7 @@ const SignUp = () => {
                             type="password" 
                             name="password" 
                             value={password} // ステートをバインド
-                            onChange={(e) => setPassword(e.target.value)} // 入力値の変更をステートに反映
+                            onChange={handleChangePassword} // 入力値の変更をステートに反映
                         />
                     </label>
                 </div>
