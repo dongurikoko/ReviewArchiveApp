@@ -9,21 +9,28 @@ const SignIn = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    // フォーム送信時の処理
-    const handleSubmit = async (event) => {
-        event.preventDefault(); // フォームのデフォルト送信を阻止
-        try {
-            // Firebaseのサインイン機能を呼び出し
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log(userCredential); // 成功した場合、ユーザー情報をコンソールに出力
-            // サインイン後の処理
-            navigate('/all');
-        } catch (error) {
-            console.error(error); // エラーが発生した場合、コンソールに出力
-        }
+    const handleChangeEmail = (event) => {
+        setEmail(event.target.value);
     }
+    
+    const handleChangePassword = (event) => {
+        setPassword(event.target.value);
+    }
+    
+    const handleSubmit = async (event) => {
+        event.preventDefault(); // フォームのデフォルト送信を防止
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            const idToken = await user.getIdToken();
+            localStorage.setItem('jwt', idToken.toString());
+            navigate("/all");
+        } catch (err) {
+            alert(err.message);
+            console.error(err);
+        }
+    };
         
-
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <h1 style={{ marginTop: '10px' }}>Sign In</h1>
@@ -31,13 +38,23 @@ const SignIn = () => {
                 <div>
                     <label>
                         Email:
-                        <input type="email" name="email" />
+                        <input 
+                            type="email" 
+                            name="email" 
+                            value={email} // ステートをバインド
+                            onChange={handleChangeEmail} // 入力値の変更をステートに反映
+                        />
                     </label>
                 </div>
                 <div>
                     <label>
                         Password:
-                        <input type="password" name="password" />
+                        <input 
+                            type="password" 
+                            name="password" 
+                            value={password} // ステートをバインド
+                            onChange={handleChangePassword} // 入力値の変更をステートに反映
+                        />
                     </label>
                 </div>
                 <button type="submit" class="register-button">Submit</button>
