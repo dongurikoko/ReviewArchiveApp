@@ -20,8 +20,8 @@ const App = () => {
     <div className="container">
       <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <Routes>
-        <Route path="/" element={<SignUp />} />
-        <Route path="/all" element={<All searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/" element={<All searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>} />
         <Route path="/contents/:id" element={<Single />} />
         <Route path="/content/new" element={<Create />} />
         <Route path="/content/update/:id" element={<Update />} />
