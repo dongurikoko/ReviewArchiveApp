@@ -12,7 +12,6 @@ import SignUp from './pages/title/signup';
 import './App.css';
 import { useState } from 'react';
 
-
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
   return(
