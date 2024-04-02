@@ -24,7 +24,7 @@ const Header = ({ searchTerm, setSearchTerm }) => {
                     <li className="navLink"><Link to="/content/new">レビュー新規作成</Link></li>
                     <li><input type="text" value={searchTerm} onChange={event => setSearchTerm(event.target.value)}
                     placeholder="🔍  キーワード検索"/></li>
-                    <button onClick={handleLogout}>Logout</button>
+                    <li><button className="logout-button" onClick={handleLogout}>Logout</button></li>
                 </ul>
             </nav>
         </header>

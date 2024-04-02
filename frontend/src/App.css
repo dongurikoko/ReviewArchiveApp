@@ -300,6 +300,22 @@ input, textarea{
     background-color: rgb(191, 180, 191); /* ホバー時の背景色 */
 }
 
+.logout-button{
+    display: inline-block;
+    background-color: white;
+    height: 65%;
+    /*color: #e386e3; テキストの色 */
+    padding: 8px 15px; /* 上下と左右のパディング */
+    text-align: center;
+    text-decoration: none; /* 下線を消す */
+    border-radius: 5px; /* 角を丸くする */
+    transition: background-color 0.3s; /* ホバー時のアニメーション効果 */
+}
+
+.logout-button:hover{
+  background-color: rgb(191, 180, 191); /* ホバー時の背景色 */
+}
+
 /* Index */
 .grid-container-in{
   display: grid;
