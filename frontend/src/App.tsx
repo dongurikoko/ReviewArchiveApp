@@ -11,10 +11,12 @@ import SignIn from './pages/title/signin';
 import SignUp from './pages/title/signup';
 import './App.css';
 import { useState } from 'react';
+import { AuthProvider } from './context/AuthContext';
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
   return(
+    <AuthProvider>
     <BrowserRouter>
     <div className="container">
       <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
@@ -30,6 +32,7 @@ const App = () => {
       <Footer />
       </div>
     </BrowserRouter>  
+    </AuthProvider>
   )
 }
 export default App;

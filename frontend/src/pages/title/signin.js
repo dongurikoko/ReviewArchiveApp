@@ -24,7 +24,8 @@ const SignIn = () => {
             const user = userCredential.user;
             const idToken = await user.getIdToken();
             localStorage.setItem('jwt', idToken.toString());
-            navigate("/all");
+            console.log(localStorage.getItem('jwt'));
+            navigate("/");
         } catch (err) {
             alert(err.message);
             console.error(err);
@@ -34,7 +35,7 @@ const SignIn = () => {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <h1 style={{ marginTop: '10px' }}>Sign In</h1>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label>
                         Email:
@@ -57,7 +58,7 @@ const SignIn = () => {
                         />
                     </label>
                 </div>
-                <button type="submit" class="register-button">Submit</button>
+                <button type="submit" className="register-button">Submit</button>
             </form>
             <p>Don't have an account? <a href="/signup">Sign Up</a></p>
         </div>

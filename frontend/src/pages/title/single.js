@@ -51,8 +51,8 @@ const Single = () => {
                 </div>
                 ) : null}
                 {singleContent && singleContent.review ? (
-                    <div class="review-box">
-                    <div class="review-box-title">REVIEW</div>
+                    <div className="review-box">
+                    <div className="review-box-title">REVIEW</div>
                    {singleContent.review}</div>
                 ) : null}
                 {singleContent && singleContent.memo ? (

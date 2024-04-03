@@ -1,9 +1,14 @@
 import {useState,useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import Header from '../../components/header'
+import { useAuthContext } from '../../context/AuthContext'
+import { useNavigate } from "react-router-dom";
 
 const All = ({ searchTerm, setSearchTerm }) => {
     const[allContents, setAllContents] = useState()
+    const navigate = useNavigate()
+
+    const info = useAuthContext()
 
     const getAllcontents = async() => {
         const response = await fetch(`http://localhost:8080/lists/search?keyword=${searchTerm}`)
@@ -12,14 +17,18 @@ const All = ({ searchTerm, setSearchTerm }) => {
     }
 
     useEffect(() => {
+        if (!info.user) {
+            navigate("/signin");
+            return; // ユーザーがいない場合はここで処理を中断
+        }
         const getAllcontents = async() => {
             const response = await fetch(`http://localhost:8080/lists/search?keyword=${searchTerm}`)
             const jsonResponse = await response.json()
             setAllContents(jsonResponse)
         }
         getAllcontents()
-    },[searchTerm])
-
+    }, [info.user, searchTerm, navigate])
+    
     return(
         <div>   
             <div className="btn-container">
@@ -33,10 +42,11 @@ const All = ({ searchTerm, setSearchTerm }) => {
                     ))}
                     </span>
                     </Link>
-                    </div>
+                </div>
             )}
             </div>
         </div>
     )
 }
+
 export default All;

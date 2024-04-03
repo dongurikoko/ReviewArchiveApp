@@ -94,8 +94,8 @@ const Delete = () => {
                 </div>
                 ) : null}
                 {deleteContent && deleteContent.review ? (
-                    <div class="review-box">
-                    <div class="review-box-title">REVIEW</div>
+                    <div className="review-box">
+                    <div className="review-box-title">REVIEW</div>
                    {deleteContent.review}</div>
                 ) : null}
                 {deleteContent && deleteContent.memo ? (
@@ -112,7 +112,7 @@ const Delete = () => {
                 </div>
                 </>
             )}
-            <button class="delete-button">削除</button>
+            <button className="delete-button">削除</button>
             </form>
         </div>
     )
