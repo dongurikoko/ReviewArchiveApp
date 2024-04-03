@@ -33,7 +33,7 @@ react起動
 `npm start`)
 
 ## Firebase Admin SDKのセットアップ
-- Firebaseコンソールからプロジェクトを作成し、プロジェクト設定でサービスアカウントを生成して秘密鍵（JSONファイル）をダウンロード
+- Firebaseコンソールからプロジェクトを作成し、プロジェクト設定でサービスアカウントを生成して秘密鍵（JSONファイル）をダウンロード  
 - 秘密鍵ファイルのパスを環境変数に設定
 ここでは"CREDENTIALS"とする。
 `export CREDENTIALS=/path/to/your/firebase-service-account-file.json`
