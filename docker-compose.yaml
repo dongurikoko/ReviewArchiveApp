@@ -33,7 +33,7 @@ services:
     volumes:
       - ./frontend:/app
     working_dir: /app
-    command: npm start
+    command: npm start # command: bash -c "npm install && npm install firebase && npm start"
     ports:
       - "3000:3000"
 

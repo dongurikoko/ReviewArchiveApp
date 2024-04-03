@@ -90,7 +90,7 @@ const UpdateItem = () => {
                 <input value={updateContent.keywords.join(', ')} onChange={handleContentChange}
                 type="text" name="keyword" placeholder="キーワード（必須） 例：文法,配列" required/>
 
-                <button class="register-button">編集</button>
+                <button className="register-button">編集</button>
             </form>
         </div>
     )
