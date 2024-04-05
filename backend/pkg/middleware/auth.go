@@ -40,6 +40,7 @@ func AuthenticateMiddleware() echo.MiddlewareFunc {
 
 			log.Printf("Verified ID Token: %v\n",token)
 
+			// 次の処理
 			return next(c)
 		}
 	}
