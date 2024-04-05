@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"reviewArchive/pkg/db"
+	"reviewArchive/pkg/middleware"
 	"reviewArchive/pkg/server/controller"
 	"reviewArchive/pkg/server/handler"
 	"reviewArchive/pkg/server/model"
@@ -42,13 +43,14 @@ func Serve(addr string) {
 	}))
 
 	/* ===== URLマッピングを行う ===== */
-	// 認証を必要としないAPI
-	e.POST("/contents", contentHandler.HandleContentCreate())
-	e.POST("/contents/:content_id", contentHandler.HandleContentUpdate())
-	e.DELETE("/contents/:content_id", contentHandler.HandleContentDelete())
-	e.GET("/lists", listHandler.HandleListGet())
-	e.GET("/lists/:content_id", listHandler.HandleListGetByContentID())
-	e.GET("/lists/search", listHandler.HandleListSearch())
+	authAPI := e.Group("", middleware.AuthenticateMiddleware())
+	// 認証を必要とするAPI
+	authAPI.POST("/contents", contentHandler.HandleContentCreate())
+	authAPI.POST("/contents/:content_id", contentHandler.HandleContentUpdate())
+	authAPI.DELETE("/contents/:content_id", contentHandler.HandleContentDelete())
+	authAPI.GET("/lists", listHandler.HandleListGet())
+	authAPI.GET("/lists/:content_id", listHandler.HandleListGetByContentID())
+	authAPI.GET("/lists/search", listHandler.HandleListSearch())
 
 	/* ===== サーバの起動 ===== */
 	log.Println("Server running...")
