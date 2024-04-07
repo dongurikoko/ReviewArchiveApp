@@ -9,11 +9,13 @@ services:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: "review-archive"
       MYSQL_DATABASE: "review_archive_api"
+      CREDENTIALS: /key.json
     ports:
       - "127.0.0.1:3306:3306"
     volumes:
       - ./backend/db/init:/docker-entrypoint-initdb.d
       - ./backend/db-data:/var/lib/mysql
+      - ${CREDENTIALS}:/key.json:ro
 
   # phpMyAdmin
   phpmyadmin:
