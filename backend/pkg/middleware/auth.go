@@ -34,7 +34,6 @@ func AuthenticateMiddleware() echo.MiddlewareFunc {
 				return echo.NewHTTPError(http.StatusInternalServerError, "failed to initialize firebase app")
 			}
 
-			
 			// firebase authを初期化
 			auth,err := app.Auth(context.Background())
 			if err != nil{

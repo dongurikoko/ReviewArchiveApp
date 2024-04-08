@@ -39,7 +39,7 @@ func Serve(addr string) {
 		Skipper:      echomiddleware.DefaultCORSConfig.Skipper,
 		AllowOrigins: echomiddleware.DefaultCORSConfig.AllowOrigins,
 		AllowMethods: echomiddleware.DefaultCORSConfig.AllowMethods,
-		AllowHeaders: []string{"Content-Type,Accept,Origin,x-token"},
+		AllowHeaders: []string{"Content-Type,Accept,Origin,Authorization,x-token"},
 	}))
 
 	/* ===== URLマッピングを行う ===== */
