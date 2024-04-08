@@ -15,13 +15,26 @@ import (
 func AuthenticateMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			// Firebase SDKのセットアップ
+			/* Firebase SDKのセットアップ
 			opt := option.WithCredentialsFile(os.Getenv("CREDENTIALS"))
 			// firebaseアプリケーションを初期化
 			app, err := firebase.NewApp(context.Background(), nil, opt)
 			if err != nil{
 				return echo.NewHTTPError(http.StatusInternalServerError, "failed to initialize firebase app")
+			}*/
+			// 環境変数CREDENTIALSの値をログに出力
+			credentialsPath := os.Getenv("CREDENTIALS")
+			log.Printf("Using CREDENTIALS file: %s\n", credentialsPath)
+
+			// Firebase SDKのセットアップ
+			opt := option.WithCredentialsFile(credentialsPath)
+			// firebaseアプリケーションを初期化
+			app, err := firebase.NewApp(context.Background(), nil, opt)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, "failed to initialize firebase app")
 			}
+
+			
 			// firebase authを初期化
 			auth,err := app.Auth(context.Background())
 			if err != nil{

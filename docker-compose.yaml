@@ -9,13 +9,11 @@ services:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: "review-archive"
       MYSQL_DATABASE: "review_archive_api"
-      CREDENTIALS: /key.json
     ports:
       - "127.0.0.1:3306:3306"
     volumes:
       - ./backend/db/init:/docker-entrypoint-initdb.d
       - ./backend/db-data:/var/lib/mysql
-      - ${CREDENTIALS}:/key.json:ro
 
   # phpMyAdmin
   phpmyadmin:
@@ -41,8 +39,6 @@ services:
 
   backend:
     image: golang:latest
-    volumes:
-      - ./backend:/app
     working_dir: /app
     command: go run ./cmd/main.go # bash -c "go get -u firebase.google.com/go && go get -u google.golang.org/api/option && go run ./cmd/main.go"
     ports:
@@ -53,8 +49,13 @@ services:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
       MYSQL_DATABASE: review_archive_api
+      CREDENTIALS: /key.json
     depends_on:
         - mysql
+    volumes:
+      - ./backend:/app
+      - ${CREDENTIALS}:/key.json:ro
+
 volumes:
   db-data:
     driver: local
