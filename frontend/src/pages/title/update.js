@@ -19,17 +19,19 @@ const UpdateItem = () => {
     })
 
     const getUpdateContent = async () => {
-        const response = await fetch(`http://localhost:8080/lists/${params.id}`)
+        const jwt = localStorage.getItem('jwt');
+        const response = await fetch(`http://localhost:8080/lists/${params.id}`,{
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${jwt}`
+            }
+        })
         const jsonResponse = await response.json()
         setUpdateContent(jsonResponse)
     }
 
     useEffect(() => {
-        const getUpdateContent = async () => {
-            const response = await fetch(`http://localhost:8080/lists/${params.id}`)
-            const jsonResponse = await response.json()
-            setUpdateContent(jsonResponse)
-        }
         getUpdateContent()
     }, [params.id])
 
@@ -53,11 +55,13 @@ const UpdateItem = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         try{
+            const jwt = localStorage.getItem('jwt');
             const response = await fetch(`http://localhost:8080/contents/${params.id}`,{
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${jwt}`
                 },
                 body: JSON.stringify(updateContent),
             })
