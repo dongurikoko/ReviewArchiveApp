@@ -9,27 +9,21 @@ const All = ({ searchTerm, setSearchTerm }) => {
     const navigate = useNavigate()
 
     const info = useAuthContext()
-
-    /*const getAllcontents = async() => {
-        const response = await fetch(`http://localhost:8080/lists/search?keyword=${searchTerm}`)
-        const jsonResponse = await response.json()
-        setAllContents(jsonResponse)
-    }*/
     
-        // JWTトークンを使用してバックエンドからコンテンツを取得する関数
-        const getAllcontents = async () => {
-            // localStorageからJWTトークンを取得
-            const jwt = localStorage.getItem('jwt');
-            const response = await fetch(`http://localhost:8080/lists/search?keyword=${searchTerm}`, {
-                method: 'GET', // HTTPメソッド
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${jwt}` // AuthorizationヘッダーにJWTトークンを設定
-                },
-            });
-            const jsonResponse = await response.json();
-            setAllContents(jsonResponse);
-        }
+    // JWTトークンを使用してバックエンドからコンテンツを取得する関数
+    const getAllcontents = async () => {
+        // localStorageからJWTトークンを取得
+        const jwt = localStorage.getItem('jwt');
+        const response = await fetch(`http://localhost:8080/lists/search?keyword=${searchTerm}`, {
+            method: 'GET', // HTTPメソッド
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwt}` // AuthorizationヘッダーにJWTトークンを設定
+            },
+        });
+        const jsonResponse = await response.json();
+        setAllContents(jsonResponse);
+    }
     
     
 
@@ -38,12 +32,6 @@ const All = ({ searchTerm, setSearchTerm }) => {
             navigate("/signin");
             return; // ユーザーがいない場合はここで処理を中断
         }
-        /*const getAllcontents = async() => {
-            //const jwt = localStorage.getItem('jwt')
-            const response = await fetch(`http://localhost:8080/lists/search?keyword=${searchTerm}`)
-            const jsonResponse = await response.json()
-            setAllContents(jsonResponse)
-        }*/
         getAllcontents()
     }, [info.user, searchTerm, navigate])
     
