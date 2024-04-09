@@ -19,17 +19,19 @@ const Delete = () => {
     })
 
     const getDeleteContent = async () => {
-        const response = await fetch(`http://localhost:8080/lists/${params.id}`)
+        const jwt = localStorage.getItem('jwt');
+        const response = await fetch(`http://localhost:8080/lists/${params.id}`,{
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${jwt}`
+            }
+        })
         const jsonResponse = await response.json()
         setDeleteContent(jsonResponse)
     }
 
     useEffect(() => {
-        const getDeleteContent = async () => {
-            const response = await fetch(`http://localhost:8080/lists/${params.id}`)
-            const jsonResponse = await response.json()
-            setDeleteContent(jsonResponse)
-        }
         getDeleteContent()
     }, [params.id])
 
@@ -54,13 +56,15 @@ const Delete = () => {
         e.preventDefault();
         if(window.confirm("本当に削除しますか？")){
             try{
-            const response = await fetch(`http://localhost:8080/contents/${params.id}`,{
-                method: "DELETE",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                },
-            })
+                const jwt = localStorage.getItem('jwt');
+                const response = await fetch(`http://localhost:8080/contents/${params.id}`,{
+                    method: "DELETE",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        'Authorization': `Bearer ${jwt}`
+                    },
+                })
             
             const jsonResponse = await response.json()
             console.log (jsonResponse)

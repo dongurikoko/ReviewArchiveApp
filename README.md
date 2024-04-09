@@ -21,7 +21,7 @@ backendフォルダ下で以下を行う。
 export MYSQL_USER=root
 export MYSQL_PASSWORD=review-archive
 export MYSQL_HOST=127.0.0.1
-export MYSQL_PORT=3307                                            
+export MYSQL_PORT=3306                                           
 export MYSQL_DATABASE=review_archive_api
 
 2.backendの通信開始
@@ -31,6 +31,12 @@ frontendフォルダ下で以下を行う。
 
 react起動
 `npm start`)
+
+## Firebase Admin SDKのセットアップ
+- Firebaseコンソールからプロジェクトを作成し、プロジェクト設定でサービスアカウントを生成して秘密鍵（JSONファイル）をダウンロード  
+- 秘密鍵ファイルのパスを環境変数に設定
+ここでは"CREDENTIALS"とする。
+`export CREDENTIALS=/path/to/your/firebase-service-account-file.json`
 
 ## 動作
 動作はこんな感じ(デザインには目を瞑っていただけると...)

@@ -34,11 +34,13 @@ const Create = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         try{
+            const jwt = localStorage.getItem('jwt');
             const response = await fetch("http://localhost:8080/contents",{
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
+                    'Authorization': `Bearer ${jwt}`
                 },
                 body: JSON.stringify(newContent),
             })
