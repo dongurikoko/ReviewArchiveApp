@@ -23,7 +23,6 @@ const Single = () => {
         const response = await fetch(`http://localhost:8080/lists/${params.id}`,{
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${jwt}` // AuthorizationヘッダーにJWTトークンを設定
             },
         })

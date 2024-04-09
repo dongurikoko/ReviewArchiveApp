@@ -17,7 +17,6 @@ const All = ({ searchTerm, setSearchTerm }) => {
         const response = await fetch(`http://localhost:8080/lists/search?keyword=${searchTerm}`, {
             method: 'GET', // HTTPメソッド
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${jwt}` // AuthorizationヘッダーにJWTトークンを設定
             },
         });
