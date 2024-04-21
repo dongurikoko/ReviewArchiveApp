@@ -45,11 +45,11 @@ func (h *ContentHandler) HandleContentUpdate() echo.HandlerFunc {
 			return fmt.Errorf("failed to bind request in HandleContentUpdate: %w", err)
 		}
 		// URLパラメータからcontent_idを取得
-		content_id, err := strconv.Atoi(c.Param("content_id"))
+		contentID, err := strconv.Atoi(c.Param("content_id"))
 		if err != nil {
-			return fmt.Errorf("failed to get content_id in HandleContentUpdate: %w", err)
+			return fmt.Errorf("failed to get contentID in HandleContentUpdate: %w", err)
 		}
-		if err := h.ContentController.ContentUpdate(content_id, req); err != nil {
+		if err := h.ContentController.ContentUpdate(contentID, req); err != nil {
 			return fmt.Errorf("failed to ContentUpdate in HandleContentUpdate: %w", err)
 		}
 		return c.JSON(http.StatusOK, echo.Map{
@@ -62,15 +62,15 @@ func (h *ContentHandler) HandleContentUpdate() echo.HandlerFunc {
 func (h *ContentHandler) HandleContentDelete() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// URLパラメータからcontent_idを取得
-		content_id, err := strconv.Atoi(c.Param("content_id"))
+		contentID, err := strconv.Atoi(c.Param("content_id"))
 
-		//fmt.Printf("content_id: %v\n", content_id)
+		//fmt.Printf("contentID: %v\n", contentID)
 
 		if err != nil {
-			return fmt.Errorf("failed to get content_id in HandleContentDelete: %w", err)
+			return fmt.Errorf("failed to get contentID in HandleContentDelete: %w", err)
 		}
 		// コンテンツテーブルから削除
-		if err := h.ContentController.ContentDelete(content_id); err != nil {
+		if err := h.ContentController.ContentDelete(contentID); err != nil {
 			return fmt.Errorf("failed to ContentDelete in HandleContentDelete: %w", err)
 		}
 		return c.JSON(http.StatusOK, echo.Map{

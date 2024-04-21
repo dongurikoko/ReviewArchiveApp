@@ -8,7 +8,7 @@ import (
 )
 
 type ListResponse struct {
-	Content_id int
+	ContentID int
 	Title      string
 	Keywords   []string
 }
@@ -43,14 +43,14 @@ func (c *ListController) GetAllContents() ([]*ListResponse, error) {
 	var listResponses []*ListResponse
 	for _, contentlist := range contentlists {
 		// コンテンツテーブルから取得したレコードのIDを元にキーワードテーブルからレコードを取得
-		keywords, err := c.KeywordRepository.SelectStringKeywordByID(contentlist.Content_id)
+		keywords, err := c.KeywordRepository.SelectStringKeywordByID(contentlist.ContentID)
 		if err != nil {
 			return nil, fmt.Errorf("failed to SelectKeywordByID in ListGet: %w", err)
 		}
 		// コンテンツテーブルから取得したレコードとキーワードテーブルから取得したレコードを結合
 		listResponse := &ListResponse{
-			Content_id: contentlist.Content_id,
-			Title:      contentlist.Content_value.Title,
+			ContentID: contentlist.ContentID,
+			Title:      contentlist.ContentValue.Title,
 			Keywords:   keywords,
 		}
 		listResponses = append(listResponses, listResponse)
@@ -79,8 +79,8 @@ func (c *ListController) GetContentsByContentID(ID int) (*ContentRequest, error)
 	// contentテーブルとkeywordテーブルのレコードを結合
 	return &ContentRequest{
 		Title:       content.Title,
-		Before_code: content.Before_code,
-		After_code:  content.After_code,
+		BeforeCode: content.BeforeCode,
+		AfterCode:  content.AfterCode,
 		Review:      content.Review,
 		Memo:        content.Memo,
 		Keywords:    keyword,
@@ -112,7 +112,7 @@ func (c *ListController) SearchContents(keyword string) ([]*ListResponse, error)
 		}
 		// コンテンツテーブルから取得したレコードとキーワードテーブルから取得したレコードを結合
 		listResponse := &ListResponse{
-			Content_id: uniqueContentID,
+			ContentID: uniqueContentID,
 			Title:      content.Title,
 			Keywords:   keywords,
 		}

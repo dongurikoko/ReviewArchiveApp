@@ -21,7 +21,6 @@ SET CHARSET utf8mb4;
 CREATE TABLE IF NOT EXISTS `review_archive_api`.`content`(
   `content_id` INT NOT NULL AUTO_INCREMENT COMMENT 'コンテンツID',
   `title` VARCHAR(255) NOT NULL COMMENT 'タイトル名',
-  `user_id` VARCHAR(255) NOT NULL COMMENT 'ユーザーID',
   `before_code` TEXT  COMMENT '修正前コード',
   `after_code` TEXT  COMMENT '修正後コード',
   `review` TEXT  COMMENT 'レビュー内容',
