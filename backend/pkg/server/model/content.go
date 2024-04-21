@@ -9,15 +9,15 @@ import (
 // コンテントテーブルデータ
 type Content struct {
 	Title       string
-	Before_code string
-	After_code  string
+	BeforeCode 	string
+	AfterCode  	string
 	Review      string
 	Memo        string
 }
 
 type ContentWithID struct {
-	Content_id    int
-	Content_value Content
+	ContentID    int
+	ContentValue Content
 }
 
 type ContentRepository struct {
@@ -41,8 +41,8 @@ func (r *ContentRepository) InsertContent(record *Content) (int, error) {
 	// レコードを追加する
 	result, err := r.Conn.Exec("INSERT INTO content (title, before_code, after_code, review, memo) VALUES (?, ?, ?, ?, ?)",
 		record.Title,
-		record.Before_code,
-		record.After_code,
+		record.BeforeCode,
+		record.AfterCode,
 		record.Review,
 		record.Memo)
 	if err != nil {
@@ -62,8 +62,8 @@ func (r *ContentRepository) InsertContent(record *Content) (int, error) {
 func (r *ContentRepository) UpdateContentByContentID(id int, record *Content) error {
 	if _, err := r.Conn.Exec("UPDATE content SET title = ?, before_code = ?, after_code = ?, review = ?, memo = ? WHERE content_id = ?",
 		record.Title,
-		record.Before_code,
-		record.After_code,
+		record.BeforeCode,
+		record.AfterCode,
 		record.Review,
 		record.Memo,
 		id); err != nil {
@@ -97,8 +97,8 @@ func ConverToContent(rows *sql.Rows) ([]*ContentWithID, error) {
 	var contents []*ContentWithID
 	for rows.Next() {
 		content := &ContentWithID{}
-		if err := rows.Scan(&content.Content_id, &content.Content_value.Title, &content.Content_value.Before_code,
-			&content.Content_value.After_code, &content.Content_value.Review, &content.Content_value.Memo); err != nil {
+		if err := rows.Scan(&content.ContentID, &content.ContentValue.Title, &content.ContentValue.BeforeCode,
+			&content.ContentValue.AfterCode, &content.ContentValue.Review, &content.ContentValue.Memo); err != nil {
 			return nil, fmt.Errorf("error scanning row in ConverToContent: %w", err)
 		}
 		contents = append(contents, content)
@@ -117,7 +117,7 @@ func (r *ContentRepository) SelectContentByContentID(id int) (*Content, error) {
 		return nil, fmt.Errorf("failed to QueryRow in SelectContentByContentID: %w", err)
 	}
 	content := &Content{}
-	err := row.Scan(&content.Title, &content.Before_code, &content.After_code, &content.Review, &content.Memo)
+	err := row.Scan(&content.Title, &content.BeforeCode, &content.AfterCode, &content.Review, &content.Memo)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return nil, fmt.Errorf("failed to Scan in SelectContentByContentID: %w", err)

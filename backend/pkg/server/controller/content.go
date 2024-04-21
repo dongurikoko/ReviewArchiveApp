@@ -8,8 +8,8 @@ import (
 
 type ContentRequest struct {
 	Title       string
-	Before_code string
-	After_code  string
+	BeforeCode string
+	AfterCode  string
 	Review      string
 	Memo        string
 	Keywords    []string
@@ -38,8 +38,8 @@ type ContentControllerInterface interface {
 func (c *ContentController) ContentCreate(record *ContentRequest) error {
 	recordContent := &model.Content{
 		Title:       record.Title,
-		Before_code: record.Before_code,
-		After_code:  record.After_code,
+		BeforeCode: record.BeforeCode,
+		AfterCode:  record.AfterCode,
 		Review:      record.Review,
 		Memo:        record.Memo,
 	}
@@ -61,8 +61,8 @@ func (c *ContentController) ContentCreate(record *ContentRequest) error {
 func (c *ContentController) ContentUpdate(id int, record *ContentRequest) error {
 	recordContent := &model.Content{
 		Title:       record.Title,
-		Before_code: record.Before_code,
-		After_code:  record.After_code,
+		BeforeCode: record.BeforeCode,
+		AfterCode:  record.AfterCode,
 		Review:      record.Review,
 		Memo:        record.Memo,
 	}

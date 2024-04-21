@@ -45,6 +45,14 @@ func AuthenticateMiddleware() echo.MiddlewareFunc {
 
 			log.Printf("Verified ID Token: %v\n",token)
 
+			// JWTからユーザーIDを取得
+			userid := token.Claims["sub"]
+
+			// ユーザーIDをコンテキストにセット
+			c.Set("userid", userid)
+
+			log.Printf("userid: %v\n",userid)
+
 			// 次の処理
 			return next(c)
 		}

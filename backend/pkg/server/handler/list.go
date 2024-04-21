@@ -10,7 +10,7 @@ import (
 )
 
 type content struct {
-	Content_id int      `json:"content_id"`
+	ContentID  int      `json:"content_id"`
 	Title      string   `json:"title"`
 	Keywords   []string `json:"keywords"`
 }
@@ -20,10 +20,10 @@ type alllist struct {
 }
 
 type listbycontentid struct {
-	Content_id  int      `json:"content_id"`
+	ContentID  int      `json:"content_id"`
 	Title       string   `json:"title"`
-	Before_code string   `json:"before_code"`
-	After_code  string   `json:"after_code"`
+	BeforeCode string   `json:"before_code"`
+	AfterCode  string   `json:"after_code"`
 	Review      string   `json:"review"`
 	Memo        string   `json:"memo"`
 	Keywords    []string `json:"keywords"`
@@ -49,7 +49,7 @@ func (h *ListHandler) HandleListGet() echo.HandlerFunc {
 		var response alllist
 		for _, list := range lists {
 			response.Contents = append(response.Contents, content{
-				Content_id: list.Content_id,
+				ContentID: list.ContentID,
 				Title:      list.Title,
 				Keywords:   list.Keywords,
 			})
@@ -63,22 +63,22 @@ func (h *ListHandler) HandleListGet() echo.HandlerFunc {
 func (h *ListHandler) HandleListGetByContentID() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// URLパラメータからcontent_idを取得
-		content_id, err := strconv.Atoi(c.Param("content_id"))
+		contentID, err := strconv.Atoi(c.Param("content_id"))
 		if err != nil {
-			return fmt.Errorf("failed to get content_id in HandleListGetByContentID: %w", err)
+			return fmt.Errorf("failed to get contentID in HandleListGetByContentID: %w", err)
 		}
 
-		//fmt.Printf("content_id: %v\n", content_id)
+		//fmt.Printf("contentID: %v\n", contentID)
 
-		content, err := h.ListController.GetContentsByContentID(content_id)
+		content, err := h.ListController.GetContentsByContentID(contentID)
 		if err != nil {
 			return fmt.Errorf("failed to ListGetByContentID in HandleListGetByContentID: %w", err)
 		}
 		response := listbycontentid{
-			Content_id:  content_id,
+			ContentID:  contentID,
 			Title:       content.Title,
-			Before_code: content.Before_code,
-			After_code:  content.After_code,
+			BeforeCode: content.BeforeCode,
+			AfterCode:  content.AfterCode,
 			Review:      content.Review,
 			Memo:        content.Memo,
 			Keywords:    content.Keywords,
@@ -102,7 +102,7 @@ func (h *ListHandler) HandleListSearch() echo.HandlerFunc {
 		var response alllist
 		for _, list := range lists {
 			response.Contents = append(response.Contents, content{
-				Content_id: list.Content_id,
+				ContentID: list.ContentID,
 				Title:      list.Title,
 				Keywords:   list.Keywords,
 			})
