@@ -16,9 +16,9 @@ USE `review_archive_api` ;
 SET CHARSET utf8mb4;
 
 -- -----------------------------------------------------
--- Table `review_archive_api`.`content`
+-- Table `review_archive_api`.`Contents`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `review_archive_api`.`content`(
+CREATE TABLE IF NOT EXISTS `review_archive_api`.`Contents`(
   `content_id` INT NOT NULL AUTO_INCREMENT COMMENT 'コンテンツID',
   `title` VARCHAR(255) NOT NULL COMMENT 'タイトル名',
   `before_code` TEXT  COMMENT '修正前コード',
@@ -31,19 +31,39 @@ COMMENT = 'コンテンツ';
 
 
 -- -----------------------------------------------------
--- Table `review_archive_api`.`keyword`
+-- Table `review_archive_api`.`Keywords`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `review_archive_api`.`keyword` (
-  `id` INT NOT NULL COMMENT 'コンテンツID',
-  `contentKeyword` VARCHAR(255) NOT NULL COMMENT 'キーワード',
-  PRIMARY KEY (`id`, `contentKeyword`),
-  CONSTRAINT `fk_content_keyword`
-    FOREIGN KEY (`id`)
-    REFERENCES `review_archive_api`.`content` (`content_id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION) 
+CREATE TABLE IF NOT EXISTS `review_archive_api`.`Keywords` (
+  `keyword_id` INT NOT NULL COMMENT 'キーワードID',
+  `keyword` VARCHAR(255) NOT NULL COMMENT 'キーワード',
+  PRIMARY KEY (`keyword_id`))
 ENGINE=InnoDB
 COMMENT = 'キーワード';
+
+-- -----------------------------------------------------
+-- Table `review_archive_api`.`Users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `review_archive_api`.`Users` (
+  `user_id` INT NOT NULL COMMENT 'ユーザID',
+  `content_id` int NOT NULL COMMENT 'コンテンツID',
+  PRIMARY KEY (`user_id`), 
+  FOREIGN KEY (content_id) REFERENCES Contents(content_id))
+ENGINE=InnoDB
+COMMENT = 'ユーザ';
+
+-- -----------------------------------------------------
+-- Table `review_archive_api`.`Tagging`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `review_archive_api`.`Tagging` (
+  `content_id` INT NOT NULL COMMENT 'コンテンツID',
+  `keyword_id` INT NOT NULL COMMENT 'キーワードID',
+  PRIMARY KEY (content_id, keyword_id),
+  FOREIGN KEY (content_id) REFERENCES Contents(content_id),
+  FOREIGN KEY (keyword_id) REFERENCES Keywords(keyword_id)
+)
+ENGINE=InnoDB
+COMMENT = 'タグ';
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
