@@ -16,40 +16,40 @@ USE `review_archive_api` ;
 SET CHARSET utf8mb4;
 
 -- -----------------------------------------------------
+-- Table `review_archive_api`.`Users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `review_archive_api`.`Users` (
+  `id` INT NOT NULL AUTO_INCREMENT COMMENT 'ユーザID',
+  `uuid` VARCHAR(255) NOT NULL COMMENT 'UUID',
+  PRIMARY KEY (`id`))
+ENGINE=InnoDB
+COMMENT = 'ユーザ';
+
+-- -----------------------------------------------------
 -- Table `review_archive_api`.`Contents`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `review_archive_api`.`Contents`(
-  `content_id` INT NOT NULL AUTO_INCREMENT COMMENT 'コンテンツID',
+  `id` INT NOT NULL AUTO_INCREMENT COMMENT 'コンテンツID',
   `title` VARCHAR(255) NOT NULL COMMENT 'タイトル名',
   `before_code` TEXT  COMMENT '修正前コード',
   `after_code` TEXT  COMMENT '修正後コード',
   `review` TEXT  COMMENT 'レビュー内容',
   `memo` TEXT  COMMENT 'メモ',
-  PRIMARY KEY (`content_id`))
+  `user_id` INT NOT NULL COMMENT 'ユーザID',
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (user_id) REFERENCES Users(id))
 ENGINE = InnoDB
 COMMENT = 'コンテンツ';
-
 
 -- -----------------------------------------------------
 -- Table `review_archive_api`.`Keywords`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `review_archive_api`.`Keywords` (
-  `keyword_id` INT NOT NULL COMMENT 'キーワードID',
+  `id` INT NOT NULL AUTO_INCREMENT COMMENT 'キーワードID',
   `keyword` VARCHAR(255) NOT NULL COMMENT 'キーワード',
-  PRIMARY KEY (`keyword_id`))
+  PRIMARY KEY (`id`))
 ENGINE=InnoDB
 COMMENT = 'キーワード';
-
--- -----------------------------------------------------
--- Table `review_archive_api`.`Users`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `review_archive_api`.`Users` (
-  `user_id` INT NOT NULL COMMENT 'ユーザID',
-  `content_id` int NOT NULL COMMENT 'コンテンツID',
-  PRIMARY KEY (`user_id`), 
-  FOREIGN KEY (content_id) REFERENCES Contents(content_id))
-ENGINE=InnoDB
-COMMENT = 'ユーザ';
 
 -- -----------------------------------------------------
 -- Table `review_archive_api`.`Tagging`
@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS `review_archive_api`.`Tagging` (
   `content_id` INT NOT NULL COMMENT 'コンテンツID',
   `keyword_id` INT NOT NULL COMMENT 'キーワードID',
   PRIMARY KEY (content_id, keyword_id),
-  FOREIGN KEY (content_id) REFERENCES Contents(content_id),
-  FOREIGN KEY (keyword_id) REFERENCES Keywords(keyword_id)
+  FOREIGN KEY (content_id) REFERENCES Contents(id),
+  FOREIGN KEY (keyword_id) REFERENCES Keywords(id)
 )
 ENGINE=InnoDB
 COMMENT = 'タグ';

@@ -27,7 +27,11 @@ func (h *ContentHandler) HandleContentCreate() echo.HandlerFunc {
 		if err := c.Bind(req); err != nil {
 			return fmt.Errorf("failed to bind request in HandleContentCreate: %w", err)
 		}
-		if err := h.ContentController.ContentCreate(req); err != nil {
+
+		// contextからuserIDを取得
+		userID := c.Get("userid").(string)
+
+		if err := h.ContentController.ContentCreate(req,userID); err != nil {
 			return fmt.Errorf("failed to ContentCreate in HandleContentCreate: %w", err)
 		}
 		return c.JSON(http.StatusOK, echo.Map{

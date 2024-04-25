@@ -18,13 +18,18 @@ type ContentRequest struct {
 type ContentController struct {
 	ContentRepository model.ContentRepositoryInterface
 	KeywordRepository model.KeywordRepositoryInterface
+	TaggingRepository model.TaggingRepositoryInterface
+	UserRepository model.UserRepositoryInterface
 }
 
 func NewContentController(contentRepository model.ContentRepositoryInterface,
-	keywordRepository model.KeywordRepositoryInterface) *ContentController {
+	keywordRepository model.KeywordRepositoryInterface,taggingRepository model.TaggingRepositoryInterface,
+	userRepository model.UserRepositoryInterface) *ContentController {
 	return &ContentController{
 		ContentRepository: contentRepository,
 		KeywordRepository: keywordRepository,
+		TaggingRepository: taggingRepository,
+		UserRepository: userRepository,
 	}
 }
 
@@ -35,14 +40,17 @@ type ContentControllerInterface interface {
 }
 
 // コンテンツ作成ロジック
-func (c *ContentController) ContentCreate(record *ContentRequest) error {
+func (c *ContentController) ContentCreate(record *ContentRequest,userID int) error {
 	recordContent := &model.Content{
 		Title:       record.Title,
-		BeforeCode: record.BeforeCode,
-		AfterCode:  record.AfterCode,
+		BeforeCode:  record.BeforeCode,
+		AfterCode:   record.AfterCode,
 		Review:      record.Review,
 		Memo:        record.Memo,
 	}
+
+	tx,err := c.ContentRepository.
+
 	// コンテンツテーブルへの挿入
 	id, err := c.ContentRepository.InsertContent(recordContent)
 	if err != nil {
