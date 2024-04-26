@@ -3,8 +3,6 @@
 以下のサイトに制作動機や仕様、設計などをまとめています。(実装途中なので適宜変更中)  
 https://kindhearted-roast-aac.notion.site/github-28e72a6593e0407e9c38430cfd8f9ec3?pvs=4
 
-frontend側の構造
-App.tsx → index.tsx → index.html → ブラウザ
 
 ### 起動
 `docker-compose up`
@@ -32,10 +30,10 @@ frontendフォルダ下で以下を行う。
 react起動
 `npm start`)
 
-## Firebase Admin SDKのセットアップ
+## Firebase Admin SDKのセットアップ  
 - Firebaseコンソールからプロジェクトを作成し、プロジェクト設定でサービスアカウントを生成して秘密鍵（JSONファイル）をダウンロード  
 - 秘密鍵ファイルのパスを環境変数に設定
-ここでは"CREDENTIALS"とする。
+ここでは"CREDENTIALS"とする。  
 `export CREDENTIALS=/path/to/your/firebase-service-account-file.json`
 
 ## 動作
