@@ -31,7 +31,7 @@ func NewContentRepository(conn *sql.DB) *ContentRepository {
 
 type ContentRepositoryInterface interface {
 	InsertContent(record *Content,tx *sql.Tx) (int, error)
-	UpdateContentByContentID(id int, record *Content) error
+	UpdateContentByContentID(id int, record *Content,tx *sql.Tx) error
 	DeleteContentByContentID(id int) error
 	SelectContent() ([]*ContentWithID, error)
 	SelectContentByContentID(id int) (*Content, error)

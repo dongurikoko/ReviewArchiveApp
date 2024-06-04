@@ -28,10 +28,10 @@ func (h *ContentHandler) HandleContentCreate() echo.HandlerFunc {
 			return fmt.Errorf("failed to bind request in HandleContentCreate: %w", err)
 		}
 
-		// contextからuserIDを取得
-		userID := c.Get("userid").(string)
-
-		if err := h.ContentController.ContentCreate(req,userID); err != nil {
+		// contextからUIDを取得
+		uid := c.Get("uid").(string)
+		
+		if err := h.ContentController.ContentCreate(req,uid); err != nil {
 			return fmt.Errorf("failed to ContentCreate in HandleContentCreate: %w", err)
 		}
 		return c.JSON(http.StatusOK, echo.Map{
@@ -48,12 +48,16 @@ func (h *ContentHandler) HandleContentUpdate() echo.HandlerFunc {
 		if err := c.Bind(req); err != nil {
 			return fmt.Errorf("failed to bind request in HandleContentUpdate: %w", err)
 		}
-		// URLパラメータからcontent_idを取得
+		// URLパラメータからcontentIDを取得
 		contentID, err := strconv.Atoi(c.Param("content_id"))
 		if err != nil {
 			return fmt.Errorf("failed to get contentID in HandleContentUpdate: %w", err)
 		}
-		if err := h.ContentController.ContentUpdate(contentID, req); err != nil {
+
+		// contextからUIDを取得
+		uid := c.Get("uid").(string)
+
+		if err := h.ContentController.ContentUpdate(contentID, req, uid); err != nil {
 			return fmt.Errorf("failed to ContentUpdate in HandleContentUpdate: %w", err)
 		}
 		return c.JSON(http.StatusOK, echo.Map{

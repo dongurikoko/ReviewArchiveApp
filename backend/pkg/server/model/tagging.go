@@ -20,18 +20,24 @@ func NewTaggingRepository(conn *sql.DB) *TaggingRepository{
 }
 
 type TaggingRepositoryInterface interface{
-	InsertTagging(record *Tagging) error
+	InsertTagging(record *Tagging,tx *sql.Tx) error
+	DeleteTaggingByContentID(contentID int,tx *sql.Tx)error
 }
 
 // taggingテーブルにレコードを追加する
-func (r *TaggingRepository)InsertTagging(record *Tagging) error{
-	// レコードを追加する
-	_,err := r.Conn.Exec("INSERT INTO Tagging (content_id, keyword_id) VALUES (?, ?)",
-		record.ContentID,
-		record.KeywordID)
-	if err != nil{
+func (r *TaggingRepository) InsertTagging(record *Tagging,tx *sql.Tx) error{
+	_,err := tx.Exec("INSERT INTO Tagging (content_id,keyword_id) VALUES (?,?)",record.ContentID,record.KeywordID)
+	if err != nil {
 		return fmt.Errorf("failed to InsertTagging: %w",err)
 	}
+	return nil
+}
 
+// taggingテーブルのレコードをcontentIDを条件に削除する
+func (r *TaggingRepository) DeleteTaggingByContentID(contentID int,tx *sql.Tx)error{
+	_,err := tx.Exec("DELETE FROM Tagging WHERE content_id = ?",contentID)
+	if err != nil{
+		return fmt.Errorf("failed to DeleteTaggingByContentID: %w",err)
+	}
 	return nil
 }

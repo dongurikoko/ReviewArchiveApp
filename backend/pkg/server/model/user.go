@@ -23,6 +23,7 @@ func NewUserRepository(conn *sql.DB) *UserRepository{
 type UserRepositoryInterface interface{
 	InsertUser(uid string)(int,error)
 	SelectUserIDByUID(uid string)(int,error)
+	SelectUserIDByUIDWithError(uid string)(int,error)
 }
 
 // ユーザテーブルにレコードを追加して、ユーザIDを返す
@@ -54,6 +55,20 @@ func (r *UserRepository)SelectUserIDByUID(uid string)(int,error){
 			}
 			return userID,nil
 		}
+		return 0,fmt.Errorf("failed to SelectUserIDByUID: %w",err)
+	}
+
+	return userID,nil
+}
+
+// uidを元にユーザIDを取得する(無い場合はエラーを返す)
+func (r *UserRepository)SelectUserIDByUIDWithError(uid string)(int,error){
+	var userID int
+	err := r.Conn.QueryRow("SELECT id FROM Users WHERE uid = ?",uid).Scan(&userID)
+	if err != nil{
+		if err == sql.ErrNoRows {
+            return 0, fmt.Errorf("no user found with uid: %s", uid)
+        }
 		return 0,fmt.Errorf("failed to SelectUserIDByUID: %w",err)
 	}
 

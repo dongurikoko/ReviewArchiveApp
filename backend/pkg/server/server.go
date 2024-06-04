@@ -16,13 +16,14 @@ import (
 var (
 	sqlDB, _ = db.GetConn()
 
-	//userRepository = model.NewUserRepository(sqlDB) //userテーブルの部分
+	userRepository = model.NewUserRepository(sqlDB) //userテーブルの部分
+	taggingRepository = model.NewTaggingRepository(sqlDB)
 	//authMiddleware = middleware.NewMiddleware(userRepository)
 
 	contentRepository = model.NewContentRepository(sqlDB)
 	keywordRepository = model.NewKeywordRepository(sqlDB)
 
-	contentController = controller.NewContentController(contentRepository, keywordRepository)
+	contentController = controller.NewContentController(contentRepository, keywordRepository,taggingRepository,userRepository)
 	listController    = controller.NewListController(contentRepository, keywordRepository)
 
 	contentHandler = handler.NewContentHandler(contentController)
