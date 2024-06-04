@@ -30,44 +30,31 @@ func NewContentRepository(conn *sql.DB) *ContentRepository {
 }
 
 type ContentRepositoryInterface interface {
-	InsertContent(record *Content) (int, error)
+	InsertContent(record *Content,tx *sql.Tx) (int, error)
 	UpdateContentByContentID(id int, record *Content) error
 	DeleteContentByContentID(id int) error
 	SelectContent() ([]*ContentWithID, error)
 	SelectContentByContentID(id int) (*Content, error)
 }
 
-// contentテーブルにレコードを追加する
-func (r *ContentRepository) InsertContent(record *Content) (int, error) {
-	// レコードを追加する
-	result, err := r.Conn.Exec("INSERT INTO Contents (title, before_code, after_code, review, memo) VALUES (?, ?, ?, ?, ?)",
-		record.Title,
-		record.BeforeCode,
-		record.AfterCode,
-		record.Review,
-		record.Memo)
+// contentテーブルにレコードを追加し、追加したcontentIDを返す
+func (r *ContentRepository) InsertContent(record *Content,tx *sql.Tx) (int, error) {
+	result, err := tx.Exec("INSERT INTO Contents (title,before_code,after_code,review,memo,user_id) VALUES (?,?,?,?,?,?)",
+		record.Title, record.BeforeCode, record.AfterCode, record.Review, record.Memo, record.UserID)
 	if err != nil {
 		return 0, fmt.Errorf("failed to InsertContent: %w", err)
 	}
-
-	// 最後に挿入された行のIDを取得する
-	id, err := result.LastInsertId()
+	contentID, err := result.LastInsertId()
 	if err != nil {
-		return 0, fmt.Errorf("failed to retrieve last insert ID: %w", err)
+		return 0, fmt.Errorf("failed to LastInsertId in InsertContent: %w", err)
 	}
-
-	return int(id), nil
+	return int(contentID), nil
 }
 
 // contentテーブルのレコードをidを条件に更新する
-func (r *ContentRepository) UpdateContentByContentID(id int, record *Content) error {
-	if _, err := r.Conn.Exec("UPDATE content SET title = ?, before_code = ?, after_code = ?, review = ?, memo = ? WHERE content_id = ?",
-		record.Title,
-		record.BeforeCode,
-		record.AfterCode,
-		record.Review,
-		record.Memo,
-		id); err != nil {
+func (r *ContentRepository) UpdateContentByContentID(id int, record *Content,tx *sql.Tx) error {
+	if _, err := tx.Exec("UPDATE Contents SET title = ?, before_code = ?, after_code = ?, review = ?, memo = ?, user_id = ? WHERE id = ?",
+		record.Title, record.BeforeCode, record.AfterCode, record.Review, record.Memo, record.UserID, id); err != nil {
 		return fmt.Errorf("failed to UpdateContentByContentID: %w", err)
 	}
 	return nil
@@ -112,13 +99,13 @@ func ConverToContent(rows *sql.Rows) ([]*ContentWithID, error) {
 
 // contentテーブルをidを条件に取得する
 func (r *ContentRepository) SelectContentByContentID(id int) (*Content, error) {
-	row := r.Conn.QueryRow("SELECT title,before_code,after_code,review,memo FROM content WHERE content_id = ?", id)
+	row := r.Conn.QueryRow("SELECT title,before_code,after_code,review,memo,user_id FROM Contents WHERE id = ?", id)
 
 	if err := row.Err(); err != nil {
 		return nil, fmt.Errorf("failed to QueryRow in SelectContentByContentID: %w", err)
 	}
 	content := &Content{}
-	err := row.Scan(&content.Title, &content.BeforeCode, &content.AfterCode, &content.Review, &content.Memo)
+	err := row.Scan(&content.Title, &content.BeforeCode, &content.AfterCode, &content.Review, &content.Memo, &content.UserID)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return nil, fmt.Errorf("failed to Scan in SelectContentByContentID: %w", err)
