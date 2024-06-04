@@ -22,7 +22,7 @@ func NewUserRepository(conn *sql.DB) *UserRepository{
 
 type UserRepositoryInterface interface{
 	InsertUser(uid string)(int,error)
-	SelectUserIDByUUID(uid string)(int,error)
+	SelectUserIDByUID(uid string)(int,error)
 }
 
 // ユーザテーブルにレコードを追加して、ユーザIDを返す
