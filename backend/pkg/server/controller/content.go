@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 
+	"reviewArchive/pkg/db"
 	"reviewArchive/pkg/server/model"
 )
 
@@ -40,26 +41,65 @@ type ContentControllerInterface interface {
 }
 
 // コンテンツ作成ロジック
-func (c *ContentController) ContentCreate(record *ContentRequest,userID int) error {
+func (c *ContentController) ContentCreate(record *ContentRequest,uid string) error {
+	// uidを元にuserIDを取得(無い場合は新規登録)
+	userID, err := c.UserRepository.SelectUserIDByUID(uid)
+	if err != nil {
+		return fmt.Errorf("failed to SelectUserIDByUID in ContentCreate: %w", err)
+	}
+	
+	conn,err := db.GetConn()
+	if err != nil {
+		return fmt.Errorf("failed to GetConn in ContentCreate: %w", err)
+	}	    
+	// トランザクション開始
+	tx, err := conn.Begin()
+	if err != nil {
+		return fmt.Errorf("failed to Begin in ContentCreate: %w", err)
+	}
+
+	// ロールバックの準備
+    defer func() {
+        if err != nil {
+            tx.Rollback()
+        } else {
+            err = tx.Commit()
+            if err != nil {
+                tx.Rollback()
+            }
+        }
+    }()
+
+	// コンテンツテーブルへの挿入
 	recordContent := &model.Content{
 		Title:       record.Title,
 		BeforeCode:  record.BeforeCode,
 		AfterCode:   record.AfterCode,
 		Review:      record.Review,
 		Memo:        record.Memo,
+		UserID:      userID,
 	}
 
-	tx,err := c.ContentRepository.
-
-	// コンテンツテーブルへの挿入
-	id, err := c.ContentRepository.InsertContent(recordContent)
+	contentID, err := c.ContentRepository.InsertContent(recordContent,tx)
 	if err != nil {
 		return fmt.Errorf("failed to InsertContent in ContentCreate: %w", err)
 	}
 
 	// キーワードテーブルへの挿入
-	if err := c.KeywordRepository.InsertKeyword(id, record.Keywords); err != nil {
-		return fmt.Errorf("failed to InsertKeyword in ContentCreate: %w", err)
+	for _, keyword := range record.Keywords {
+		// keywordを元にkeywordIDを取得(無い場合は新規登録)
+		keywordID, err := c.KeywordRepository.SelectKeywordIDByKeyword(keyword,tx)
+		if err != nil {
+			return fmt.Errorf("failed to InsertKeyword in ContentCreate: %w", err)
+		}
+		// タグテーブルへの挿入
+		tagging := &model.Tagging{
+			ContentID: contentID,
+			KeywordID: keywordID,
+		}
+		if err := c.TaggingRepository.InsertTagging(tagging,tx); err != nil {
+			return fmt.Errorf("failed to InsertTagging in ContentCreate: %w", err)
+		}
 	}
 
 	return nil
