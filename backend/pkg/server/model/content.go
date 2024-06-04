@@ -13,6 +13,7 @@ type Content struct {
 	AfterCode  	string
 	Review      string
 	Memo        string
+	UserID	  	int
 }
 
 type ContentWithID struct {
@@ -39,7 +40,7 @@ type ContentRepositoryInterface interface {
 // contentテーブルにレコードを追加する
 func (r *ContentRepository) InsertContent(record *Content) (int, error) {
 	// レコードを追加する
-	result, err := r.Conn.Exec("INSERT INTO content (title, before_code, after_code, review, memo) VALUES (?, ?, ?, ?, ?)",
+	result, err := r.Conn.Exec("INSERT INTO Contents (title, before_code, after_code, review, memo) VALUES (?, ?, ?, ?, ?)",
 		record.Title,
 		record.BeforeCode,
 		record.AfterCode,

@@ -42,7 +42,7 @@ func (r *UserRepository)InsertUser(uid string)(int,error){
 }
 
 // uidを元にユーザIDを取得する(無い場合は新規登録)
-func (r *UserRepository)SelectUserIDByUUID(uid string)(int,error){
+func (r *UserRepository)SelectUserIDByUID(uid string)(int,error){
 	var userID int
 	err := r.Conn.QueryRow("SELECT id FROM Users WHERE uid = ?",uid).Scan(&userID)
 	if err != nil{
@@ -50,11 +50,11 @@ func (r *UserRepository)SelectUserIDByUUID(uid string)(int,error){
 			// ユーザがいない場合は新規登録
 			userID,err = r.InsertUser(uid)
 			if err != nil{
-				return 0,fmt.Errorf("failed to InsertUser in SelectUserIDByUUID: %w",err)
+				return 0,fmt.Errorf("failed to InsertUser in SelectUserIDByUID: %w",err)
 			}
 			return userID,nil
 		}
-		return 0,fmt.Errorf("failed to SelectUserIDByUUID: %w",err)
+		return 0,fmt.Errorf("failed to SelectUserIDByUID: %w",err)
 	}
 
 	return userID,nil
