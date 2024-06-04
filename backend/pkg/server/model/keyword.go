@@ -2,6 +2,7 @@ package model
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 )
 
@@ -22,16 +23,16 @@ func NewKeywordRepository(conn *sql.DB) *KeywordRepository {
 }
 
 type KeywordRepositoryInterface interface {
-	InsertKeyword(id int, keywords []string) error
+	InsertKeyword(keyword string,tx *sql.Tx)(int,error)
+	SelectKeywordIDByKeyword(keyword string,tx *sql.Tx)(int,error)
 	DeleteKeywordByID(id int) error
 	SelectKeywordByID(id int) ([]*Keyword, error)
 	SelectStringKeywordByID(id int) ([]string, error)
 	SelectIDByContentKeyword(contentKeyword string) ([]int, error)
 }
 
-// キーワードテーブルに挿入する
+/* キーワードテーブルに挿入する(バルクインサートを使用する場合の実装)
 func (r *KeywordRepository) InsertKeyword(id int, keywords []string) error {
-	// バルクインサートの実装
 	insert := "INSERT INTO keyword (id, contentKeyword) VALUES "
 
 	vals := make([]any, 0, len(keywords))
@@ -54,6 +55,39 @@ func (r *KeywordRepository) InsertKeyword(id int, keywords []string) error {
 	}
 	return nil
 
+}
+*/
+
+// キーワードテーブルにレコードを追加して、keywordIDを返す
+func (r *KeywordRepository)InsertKeyword(keyword string,tx *sql.Tx)(int,error){
+	result,err := tx.Exec("INSERT INTO Keywords (keyword) VALUES (?)",keyword)
+	if err != nil{
+		return 0,fmt.Errorf("failed to InsertKeyword in InsertKeyword: %w",err)
+	}
+	keywordID,err := result.LastInsertId()
+	if err != nil{
+		return 0,fmt.Errorf("failed to LastInsertId in InsertKeyword: %w",err)
+	}
+	return int(keywordID),nil
+}
+
+// キーワードを元にkeywordIDを取得する(無い場合は新規登録)
+func (r *KeywordRepository)SelectKeywordIDByKeyword(keyword string,tx *sql.Tx)(int,error){
+	var keywordID int
+	err := tx.QueryRow("SELECT id FROM Keywords WHERE keyword = ?",keyword).Scan(&keywordID)
+	if err != nil{
+		if errors.Is(err,sql.ErrNoRows){
+			// キーワードがない場合は新規登録
+			keywordID,err = r.InsertKeyword(keyword,tx)
+			if err != nil{
+				return 0,fmt.Errorf("failed to InsertKeyword in SelectKeywordIDByKeyword: %w",err)
+			}
+			return keywordID,nil
+		}
+		return 0,fmt.Errorf("failed to SelectKeywordIDByKeyword: %w",err)
+	}
+
+	return keywordID,nil
 }
 
 /* キーワードを更新する
