@@ -2,14 +2,15 @@ package model
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 )
 
-// ユーザテーブルデータ
+/* ユーザテーブルデータ
 type User struct{
-	userID int
-	UUID string
-}
+	ID int
+	UID string
+}*/
 
 type UserRepository struct {
 	Conn *sql.DB
@@ -20,13 +21,13 @@ func NewUserRepository(conn *sql.DB) *UserRepository{
 }
 
 type UserRepositoryInterface interface{
-	InsertUser(record *User)(int,error)
-	SelectUserIDByUUID(uuid string)(int,error)
+	InsertUser(uid string)(int,error)
+	SelectUserIDByUUID(uid string)(int,error)
 }
 
-func (r *UserRepository)InsertUser(record *User)(int,error){
-	result,err := r.Conn.Exec("INSERT INTO Users (uuid) VALUES (?)",
-		record.UUID)
+// ユーザテーブルにレコードを追加して、ユーザIDを返す
+func (r *UserRepository)InsertUser(uid string)(int,error){
+	result,err := r.Conn.Exec("INSERT INTO Users (uid) VALUES (?)",uid)
 	if err != nil{
 		return 0,fmt.Errorf("failed to InsertUser: %w",err)
 	}
@@ -40,11 +41,19 @@ func (r *UserRepository)InsertUser(record *User)(int,error){
 	return int(id),nil
 }
 
-// uuidを元にユーザIDを取得する
-func (r *UserRepository)SelectUserIDByUUID(uuid string)(int,error){
+// uidを元にユーザIDを取得する(無い場合は新規登録)
+func (r *UserRepository)SelectUserIDByUUID(uid string)(int,error){
 	var userID int
-	err := r.Conn.QueryRow("SELECT id FROM Users WHERE uuid = ?",uuid).Scan(&userID)
+	err := r.Conn.QueryRow("SELECT id FROM Users WHERE uid = ?",uid).Scan(&userID)
 	if err != nil{
+		if errors.Is(err,sql.ErrNoRows){
+			// ユーザがいない場合は新規登録
+			userID,err = r.InsertUser(uid)
+			if err != nil{
+				return 0,fmt.Errorf("failed to InsertUser in SelectUserIDByUUID: %w",err)
+			}
+			return userID,nil
+		}
 		return 0,fmt.Errorf("failed to SelectUserIDByUUID: %w",err)
 	}
 
