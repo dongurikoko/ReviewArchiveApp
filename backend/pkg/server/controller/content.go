@@ -36,7 +36,7 @@ func NewContentController(contentRepository model.ContentRepositoryInterface,
 
 type ContentControllerInterface interface {
 	ContentCreate(record *ContentRequest,uid string) error
-	ContentDelete(id int) error
+	DeleteByContentID(contentID int) error
 	ContentUpdate(contentID int, record *ContentRequest,uid string) error
 }
 
@@ -184,9 +184,38 @@ func (c *ContentController) ContentUpdate(contentID int, record *ContentRequest,
 }
 
 // コンテンツ削除ロジック
-func (c *ContentController) ContentDelete(id int) error {
-	if err := c.ContentRepository.DeleteContentByContentID(id); err != nil {
-		return fmt.Errorf("failed to DeleteContentByContentID in ContentDelete: %w", err)
+func (c *ContentController) DeleteByContentID(contentID int) error {
+	conn,err := db.GetConn()
+	if err != nil {
+		return fmt.Errorf("failed to GetConn in ContentCreate: %w", err)
+	}	    
+	// トランザクション開始
+	tx, err := conn.Begin()
+	if err != nil {
+		return fmt.Errorf("failed to Begin in ContentCreate: %w", err)
 	}
+
+	// ロールバックの準備
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		} else {
+			err = tx.Commit()
+			if err != nil {
+				tx.Rollback()
+			}
+		}
+	}()
+
+	// タグテーブルの削除
+	if err := c.TaggingRepository.DeleteTaggingByContentID(contentID,tx); err != nil {
+		return fmt.Errorf("failed to DeleteTaggingByContentID in DeleteByContentID: %w", err)
+	}
+
+	// コンテンツテーブルの削除
+	if err := c.ContentRepository.DeleteContentByContentID(contentID,tx); err != nil {
+		return fmt.Errorf("failed to DeleteContentByContentID in DeleteByContentID: %w", err)
+	}
+
 	return nil
 }

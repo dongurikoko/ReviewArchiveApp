@@ -32,7 +32,7 @@ func NewContentRepository(conn *sql.DB) *ContentRepository {
 type ContentRepositoryInterface interface {
 	InsertContent(record *Content,tx *sql.Tx) (int, error)
 	UpdateContentByContentID(id int, record *Content,tx *sql.Tx) error
-	DeleteContentByContentID(id int) error
+	DeleteContentByContentID(id int,tx *sql.Tx) error
 	SelectContent() ([]*ContentWithID, error)
 	SelectContentByContentID(id int) (*Content, error)
 }
@@ -61,8 +61,9 @@ func (r *ContentRepository) UpdateContentByContentID(id int, record *Content,tx 
 }
 
 // contentテーブルのレコードをidを条件に削除する
-func (r *ContentRepository) DeleteContentByContentID(id int) error {
-	if _, err := r.Conn.Exec("DELETE FROM content WHERE content_id = ?", id); err != nil {
+func (r *ContentRepository) DeleteContentByContentID(id int,tx *sql.Tx) error {
+	_, err := tx.Exec("DELETE FROM Contents WHERE id = ?", id)
+	if err != nil {
 		return fmt.Errorf("failed to DeleteContentByContentID: %w", err)
 	}
 	return nil

@@ -66,7 +66,7 @@ func (h *ContentHandler) HandleContentUpdate() echo.HandlerFunc {
 	}
 }
 
-// コンテンツの削除処理(contentテーブルを削除するとkeywordも自動で削除される)
+// コンテンツの削除処理
 func (h *ContentHandler) HandleContentDelete() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// URLパラメータからcontent_idを取得
@@ -77,10 +77,11 @@ func (h *ContentHandler) HandleContentDelete() echo.HandlerFunc {
 		if err != nil {
 			return fmt.Errorf("failed to get contentID in HandleContentDelete: %w", err)
 		}
-		// コンテンツテーブルから削除
-		if err := h.ContentController.ContentDelete(contentID); err != nil {
-			return fmt.Errorf("failed to ContentDelete in HandleContentDelete: %w", err)
+		// コンテンツテーブルとtaggingテーブルから削除
+		if err := h.ContentController.DeleteByContentID(contentID); err != nil {
+			return fmt.Errorf("failed to DeleteByContentID in HandleContentDelete: %w", err)
 		}
+
 		return c.JSON(http.StatusOK, echo.Map{
 			"message": "Success to Delete Content",
 		})
