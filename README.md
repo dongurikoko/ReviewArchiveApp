@@ -1,7 +1,11 @@
 # ReviewArchiveApp
 
-以下のサイトに制作動機や仕様、設計などをまとめています。(実装途中なので適宜変更中)  
+以下のサイトに制作動機や仕様、設計など諸々をまとめています。(修正途中なので適宜変更中)  
 https://kindhearted-roast-aac.notion.site/github-28e72a6593e0407e9c38430cfd8f9ec3?pvs=4
+
+テーブル設計：
+
+<img width="450" alt="スクリーンショット 2024-06-05 2 59 30" src="https://github.com/dongurikoko/ReviewArchiveApp/assets/108347471/db720373-9f5b-45d9-8f90-63c9408e9f13">
 
 
 ### 起動
