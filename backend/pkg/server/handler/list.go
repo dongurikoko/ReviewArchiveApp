@@ -119,8 +119,7 @@ func (h *ListHandler) HandleListSearch() echo.HandlerFunc {
 		var lists []*controller.ListResponse
 		var err error
 
-		// keywordが空なら一覧を表示
-		if keyword == "" {
+		if keyword == "" { // keywordがない場合は全てのコンテンツを一覧取得
 			lists, err = h.ListController.GetAllContents(uid)
 			if err != nil {
 				return fmt.Errorf("failed to GetAllContents in HandleListGet: %w", err)

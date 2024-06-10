@@ -130,7 +130,7 @@ func (r *ContentRepository) SelectContentByKeywordsAndUserID(keyword string,user
 	// Contents,Tagging,Keywordテーブルを結合し、userID,keywordがそれぞれ一致するコンテンツを取得
 	query := `
 	SELECT 
-        c.id AS content_id,
+		c.id AS content_id,
         c.title,
         c.before_code,
         c.after_code,
@@ -144,10 +144,10 @@ func (r *ContentRepository) SelectContentByKeywordsAndUserID(keyword string,user
     JOIN 
         Keywords k ON t.keyword_id = k.id
     WHERE 
-        k.keyword = ? AND c.user_id = ?;
+        k.keyword LIKE ? AND c.user_id = ?;
     `
-
-	rows, err := r.Conn.Query(query, keyword, userID)
+	partialKeyword := "%" + keyword + "%"
+	rows, err := r.Conn.Query(query, partialKeyword, userID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to SelectContentByKeywordsAndUserID in SearchContents: %w", err)
 	}
