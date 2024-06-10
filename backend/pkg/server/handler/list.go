@@ -42,22 +42,34 @@ func NewListHandler(listController controller.ListControllerInterface) *ListHand
 // コンテンツの一覧取得処理
 func (h *ListHandler) HandleListGet() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		lists, err := h.ListController.GetAllContents()
-		if err != nil {
-			return fmt.Errorf("failed to ListGet in HandleListGet: %w", err)
+		// contextからUIDを取得
+		uidwithnil := c.Get("uid")
+
+		// uidがnilなら何も表示しない
+		if uidwithnil == nil {
+			return c.JSON(http.StatusOK, &alllist{})
 		}
+
+		uid := uidwithnil.(string)
+
+		// user_idが一致するコンテンツを一覧取得
+		lists, err := h.ListController.GetAllContents(uid)
+		if err != nil {
+			return fmt.Errorf("failed to GetAllContents in HandleListGet: %w", err)
+		}
+
 		var response alllist
 		for _, list := range lists {
 			response.Contents = append(response.Contents, content{
 				ContentID: list.ContentID,
-				Title:      list.Title,
-				Keywords:   list.Keywords,
+				Title:     list.Title,
+				Keywords:  list.Keywords,
 			})
 		}
-
 		return c.JSON(http.StatusOK, &response)
 	}
 }
+
 
 // 特定のコンテンツの詳細取得処理
 func (h *ListHandler) HandleListGetByContentID() echo.HandlerFunc {
@@ -104,10 +116,20 @@ func (h *ListHandler) HandleListSearch() echo.HandlerFunc {
 
 		uid := uidwithnil.(string)
 
-		// keywordが一致するコンテンツを一覧取得
-		lists, err := h.ListController.SearchContents(keyword,uid)
-		if err != nil {
-			return fmt.Errorf("failed to SearchContents in HandleListSearch: %w", err)
+		var lists []*controller.ListResponse
+		var err error
+
+		// keywordが空なら一覧を表示
+		if keyword == "" {
+			lists, err = h.ListController.GetAllContents(uid)
+			if err != nil {
+				return fmt.Errorf("failed to GetAllContents in HandleListGet: %w", err)
+			}
+		} else { // keywordがある場合はキーワードが一致するコンテンツを一覧取得
+			lists, err = h.ListController.SearchContents(keyword,uid)
+			if err != nil {
+				return fmt.Errorf("failed to SearchContents in HandleListSearch: %w", err)
+			}
 		}
 
 		var response alllist

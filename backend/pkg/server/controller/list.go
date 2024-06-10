@@ -27,24 +27,31 @@ func NewListController(contentRepository model.ContentRepositoryInterface,
 }
 
 type ListControllerInterface interface {
-	GetAllContents() ([]*ListResponse, error)
+	GetAllContents(uid string) ([]*ListResponse, error)
 	GetContentsByContentID(ID int) (*ContentRequest, error)
 	SearchContents(keyword string,uid string) ([]*ListResponse, error)
 }
 
 // コンテンツの一覧取得ロジック
-func (c *ListController) GetAllContents() ([]*ListResponse, error) {
-	// コンテンツテーブルから全てのレコードを取得
-	contentlists, err := c.ContentRepository.SelectContent()
+func (c *ListController) GetAllContents(uid string) ([]*ListResponse, error) {
+	// uidを元にuserIDを取得
+	userID, err := c.UserRepository.SelectUserIDByUIDWithError(uid)
 	if err != nil {
-		return nil, fmt.Errorf("failed to SelectContent in ListGet: %w", err)
+		return nil, fmt.Errorf("failed to SelectUserIDByUIDWithError in SearchContents: %w", err)
+	}
+
+	// userIDを元にコンテンツを取得
+	contentlists, err := c.ContentRepository.SelectContentByUserID(userID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to SelectContentByUserID in GetAllContents: %w", err)
 	}
 
 	var listResponses []*ListResponse
 	for _, contentlist := range contentlists {
+		// contentIDを元に紐づくキーワードを取得
 		keywords, err := c.KeywordRepository.SelectStringKeywordByID(contentlist.ContentID)
 		if err != nil {
-			return nil, fmt.Errorf("failed to SelectKeywordByID in ListGet: %w", err)
+			return nil, fmt.Errorf("failed to SelectKeywordByID in GetAllContents: %w", err)
 		}
 		listResponse := &ListResponse{
 			ContentID:  contentlist.ContentID,
@@ -55,7 +62,6 @@ func (c *ListController) GetAllContents() ([]*ListResponse, error) {
 	}
 
 	return listResponses, nil
-
 }
 
 // 特定のコンテンツの詳細取得ロジック

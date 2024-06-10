@@ -48,6 +48,7 @@ func Serve(addr string) {
 	authAPI.POST("/contents", contentHandler.HandleContentCreate())
 	authAPI.POST("/contents/:content_id", contentHandler.HandleContentUpdate())
 	authAPI.DELETE("/contents/:content_id", contentHandler.HandleContentDelete())
+	// authAPI.GET("/lists", listHandler.HandleListGet())
 	authAPI.GET("/lists/:content_id", listHandler.HandleListGetByContentID())
 	authAPI.GET("/lists/search", listHandler.HandleListSearch())
 

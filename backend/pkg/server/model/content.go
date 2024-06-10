@@ -36,6 +36,7 @@ type ContentRepositoryInterface interface {
 	SelectContent() ([]*ContentWithID, error)
 	SelectContentByContentID(id int) (*Content, error)
 	SelectContentByKeywordsAndUserID(keyword string,userID int)([]*ContentWithID,error)
+	SelectContentByUserID(userID int) ([]*ContentWithID, error)
 }
 
 // contentテーブルにレコードを追加し、追加したcontentIDを返す
@@ -114,6 +115,15 @@ func (r *ContentRepository) SelectContentByContentID(id int) (*Content, error) {
 	}
 
 	return content, nil
+}
+
+func (r *ContentRepository) SelectContentByUserID(userID int) ([]*ContentWithID, error) {
+	rows, err := r.Conn.Query("SELECT * FROM Contents WHERE user_id = ?", userID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to SelectContentByUserID in SearchContents: %w", err)
+	}
+
+	return ConverToContentWithID(rows)
 }
 
 func (r *ContentRepository) SelectContentByKeywordsAndUserID(keyword string,userID int)([]*ContentWithID,error){
