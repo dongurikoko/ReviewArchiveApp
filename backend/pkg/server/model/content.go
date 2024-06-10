@@ -130,7 +130,7 @@ func (r *ContentRepository) SelectContentByKeywordsAndUserID(keyword string,user
 	// Contents,Tagging,Keywordテーブルを結合し、userID,keywordがそれぞれ一致するコンテンツを取得
 	query := `
 	SELECT 
-		c.id AS content_id,
+		DISTINCT c.id AS content_id,
         c.title,
         c.before_code,
         c.after_code,
