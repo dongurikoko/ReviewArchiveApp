@@ -54,7 +54,6 @@ func (h *ContentHandler) HandleContentUpdate() echo.HandlerFunc {
 			return fmt.Errorf("failed to get contentID in HandleContentUpdate: %w", err)
 		}
 
-		// contextからUIDを取得
 		uid := c.Get("uid").(string)
 
 		if err := h.ContentController.ContentUpdate(contentID, req, uid); err != nil {

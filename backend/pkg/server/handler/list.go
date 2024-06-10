@@ -93,8 +93,19 @@ func (h *ListHandler) HandleListSearch() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// クエリパラメータからkeywordを取得
 		keyword := c.QueryParam("keyword")
-		// keywordが一致するコンテンツを取得
-		lists, err := h.ListController.SearchContents(keyword)
+		
+		// contextからUIDを取得
+		uidwithnil := c.Get("uid")
+
+		// uidがnilなら何も表示しない
+		if uidwithnil == nil {
+			return c.JSON(http.StatusOK, &alllist{})
+		}
+
+		uid := uidwithnil.(string)
+
+		// keywordが一致するコンテンツを一覧取得
+		lists, err := h.ListController.SearchContents(keyword,uid)
 		if err != nil {
 			return fmt.Errorf("failed to SearchContents in HandleListSearch: %w", err)
 		}
@@ -103,8 +114,8 @@ func (h *ListHandler) HandleListSearch() echo.HandlerFunc {
 		for _, list := range lists {
 			response.Contents = append(response.Contents, content{
 				ContentID: list.ContentID,
-				Title:      list.Title,
-				Keywords:   list.Keywords,
+				Title:     list.Title,
+				Keywords:  list.Keywords,
 			})
 		}
 		return c.JSON(http.StatusOK, &response)

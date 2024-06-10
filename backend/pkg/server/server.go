@@ -18,13 +18,12 @@ var (
 
 	userRepository = model.NewUserRepository(sqlDB) //userテーブルの部分
 	taggingRepository = model.NewTaggingRepository(sqlDB)
-	//authMiddleware = middleware.NewMiddleware(userRepository)
-
 	contentRepository = model.NewContentRepository(sqlDB)
 	keywordRepository = model.NewKeywordRepository(sqlDB)
+	//authMiddleware = middleware.NewMiddleware(userRepository)
 
 	contentController = controller.NewContentController(contentRepository, keywordRepository,taggingRepository,userRepository)
-	listController    = controller.NewListController(contentRepository, keywordRepository)
+	listController    = controller.NewListController(contentRepository, keywordRepository, userRepository)
 
 	contentHandler = handler.NewContentHandler(contentController)
 	listHandler    = handler.NewListHandler(listController)

@@ -35,6 +35,7 @@ type ContentRepositoryInterface interface {
 	DeleteContentByContentID(id int,tx *sql.Tx) error
 	SelectContent() ([]*ContentWithID, error)
 	SelectContentByContentID(id int) (*Content, error)
+	SelectContentByKeywordsAndUserID(keyword string,userID int)([]*ContentWithID,error)
 }
 
 // contentテーブルにレコードを追加し、追加したcontentIDを返す
@@ -71,23 +72,23 @@ func (r *ContentRepository) DeleteContentByContentID(id int,tx *sql.Tx) error {
 
 // contentテーブルを一覧取得する
 func (r *ContentRepository) SelectContent() ([]*ContentWithID, error) {
-	rows, err := r.Conn.Query("SELECT * FROM content")
+	rows, err := r.Conn.Query("SELECT * FROM Contents")
 	if err != nil {
 		return nil, fmt.Errorf("failed to SelectContent: %w", err)
 	}
 
-	return ConverToContent(rows)
+	return ConverToContentWithID(rows)
 }
 
-// rowデータをContentデータに変換する
-func ConverToContent(rows *sql.Rows) ([]*ContentWithID, error) {
+// rowデータをContentWithIDデータに変換する
+func ConverToContentWithID(rows *sql.Rows) ([]*ContentWithID, error) {
 	defer rows.Close()
 
 	var contents []*ContentWithID
 	for rows.Next() {
 		content := &ContentWithID{}
 		if err := rows.Scan(&content.ContentID, &content.ContentValue.Title, &content.ContentValue.BeforeCode,
-			&content.ContentValue.AfterCode, &content.ContentValue.Review, &content.ContentValue.Memo); err != nil {
+			&content.ContentValue.AfterCode, &content.ContentValue.Review, &content.ContentValue.Memo,&content.ContentValue.UserID); err != nil {
 			return nil, fmt.Errorf("error scanning row in ConverToContent: %w", err)
 		}
 		contents = append(contents, content)
@@ -114,3 +115,33 @@ func (r *ContentRepository) SelectContentByContentID(id int) (*Content, error) {
 
 	return content, nil
 }
+
+func (r *ContentRepository) SelectContentByKeywordsAndUserID(keyword string,userID int)([]*ContentWithID,error){
+	// Contents,Tagging,Keywordテーブルを結合し、userID,keywordがそれぞれ一致するコンテンツを取得
+	query := `
+	SELECT 
+        c.id AS content_id,
+        c.title,
+        c.before_code,
+        c.after_code,
+        c.review,
+        c.memo,
+        c.user_id
+    FROM 
+        Contents c
+	JOIN 
+        Tagging t ON c.id = t.content_id
+    JOIN 
+        Keywords k ON t.keyword_id = k.id
+    WHERE 
+        k.keyword = ? AND c.user_id = ?;
+    `
+
+	rows, err := r.Conn.Query(query, keyword, userID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to SelectContentByKeywordsAndUserID in SearchContents: %w", err)
+	}
+
+	return ConverToContentWithID(rows)
+}
+

@@ -20,7 +20,7 @@ SET CHARSET utf8mb4;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `review_archive_api`.`Users` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT 'ユーザID',
-  `uid` VARCHAR(255) NOT NULL COMMENT 'UID',
+  `uid` TEXT NOT NULL COMMENT 'UID',
   PRIMARY KEY (`id`))
 ENGINE=InnoDB
 COMMENT = 'ユーザ';

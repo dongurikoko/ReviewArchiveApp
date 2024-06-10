@@ -27,7 +27,7 @@ type KeywordRepositoryInterface interface {
 	SelectKeywordIDByKeyword(keyword string,tx *sql.Tx)(int,error)
 	DeleteKeywordByID(id int) error
 	SelectKeywordByID(id int) ([]*Keyword, error)
-	SelectStringKeywordByID(id int) ([]string, error)
+	SelectStringKeywordByID(contentID int) ([]string, error)
 	SelectIDByContentKeyword(contentKeyword string) ([]int, error)
 }
 
@@ -118,10 +118,20 @@ func (r *KeywordRepository) SelectKeywordByID(id int) ([]*Keyword, error) {
 }
 
 // キーワードをidを条件に取得する([]stringを返す場合)
-func (r *KeywordRepository) SelectStringKeywordByID(id int) ([]string, error) {
-	rows, err := r.Conn.Query("SELECT contentKeyword FROM keyword WHERE id = ?", id)
+func (r *KeywordRepository) SelectStringKeywordByID(contentID int) ([]string, error) {
+	query := `
+    SELECT 
+        k.keyword
+    FROM 
+        Keywords k
+    JOIN 
+        Tagging t ON k.id = t.keyword_id
+    WHERE 
+        t.content_id = ?;
+    `
+	rows, err := r.Conn.Query(query, contentID)
 	if err != nil {
-		return nil, fmt.Errorf("failed to SELECT * in SelectKeywordByID: %w", err)
+		return nil, fmt.Errorf("failed to SELECT keyword in SelectStringKeywordByID: %w", err)
 	}
 	return ConverToString(rows)
 }
