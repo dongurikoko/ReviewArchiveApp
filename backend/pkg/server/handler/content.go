@@ -10,6 +10,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+
+type contentRequest struct {
+	Title       string   `json:"title"`
+	BeforeCode  string   `json:"before_code"`
+	AfterCode   string   `json:"after_code"`
+	Review      string   `json:"review"`
+	Memo        string   `json:"memo"`
+	Keywords    []string `json:"keywords"`
+}
+
 type ContentHandler struct {
 	ContentController controller.ContentControllerInterface
 }
@@ -23,11 +33,26 @@ func NewContentHandler(contentController controller.ContentControllerInterface) 
 // コンテンツ作成処理
 func (h *ContentHandler) HandleContentCreate() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		req := &controller.ContentRequest{}
+		req := &contentRequest{}
 		if err := c.Bind(req); err != nil {
 			return fmt.Errorf("failed to bind request in HandleContentCreate: %w", err)
 		}
-		if err := h.ContentController.ContentCreate(req); err != nil {
+
+		// fmt.Printf("req: %v\n", req)
+
+		// contextからUIDを取得
+		uid := c.Get("uid").(string)
+
+		reqController := &controller.ContentRequest{
+			Title:       req.Title,
+			BeforeCode:  req.BeforeCode,
+			AfterCode:   req.AfterCode,
+			Review:      req.Review,
+			Memo:        req.Memo,
+			Keywords:    req.Keywords,
+		}
+		
+		if err := h.ContentController.ContentCreate(reqController,uid); err != nil {
 			return fmt.Errorf("failed to ContentCreate in HandleContentCreate: %w", err)
 		}
 		return c.JSON(http.StatusOK, echo.Map{
@@ -40,16 +65,28 @@ func (h *ContentHandler) HandleContentCreate() echo.HandlerFunc {
 // コンテンツのアップデート処理
 func (h *ContentHandler) HandleContentUpdate() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		req := &controller.ContentRequest{}
+		req := &contentRequest{}
 		if err := c.Bind(req); err != nil {
 			return fmt.Errorf("failed to bind request in HandleContentUpdate: %w", err)
 		}
-		// URLパラメータからcontent_idを取得
+		// URLパラメータからcontentIDを取得
 		contentID, err := strconv.Atoi(c.Param("content_id"))
 		if err != nil {
 			return fmt.Errorf("failed to get contentID in HandleContentUpdate: %w", err)
 		}
-		if err := h.ContentController.ContentUpdate(contentID, req); err != nil {
+
+		uid := c.Get("uid").(string)
+
+		reqController := &controller.ContentRequest{
+			Title:       req.Title,
+			BeforeCode:  req.BeforeCode,
+			AfterCode:   req.AfterCode,
+			Review:      req.Review,
+			Memo:        req.Memo,
+			Keywords:    req.Keywords,
+		}
+
+		if err := h.ContentController.ContentUpdate(contentID, reqController, uid); err != nil {
 			return fmt.Errorf("failed to ContentUpdate in HandleContentUpdate: %w", err)
 		}
 		return c.JSON(http.StatusOK, echo.Map{
@@ -58,7 +95,7 @@ func (h *ContentHandler) HandleContentUpdate() echo.HandlerFunc {
 	}
 }
 
-// コンテンツの削除処理(contentテーブルを削除するとkeywordも自動で削除される)
+// コンテンツの削除処理
 func (h *ContentHandler) HandleContentDelete() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// URLパラメータからcontent_idを取得
@@ -69,10 +106,11 @@ func (h *ContentHandler) HandleContentDelete() echo.HandlerFunc {
 		if err != nil {
 			return fmt.Errorf("failed to get contentID in HandleContentDelete: %w", err)
 		}
-		// コンテンツテーブルから削除
-		if err := h.ContentController.ContentDelete(contentID); err != nil {
-			return fmt.Errorf("failed to ContentDelete in HandleContentDelete: %w", err)
+		// コンテンツテーブルとtaggingテーブルから削除
+		if err := h.ContentController.DeleteByContentID(contentID); err != nil {
+			return fmt.Errorf("failed to DeleteByContentID in HandleContentDelete: %w", err)
 		}
+
 		return c.JSON(http.StatusOK, echo.Map{
 			"message": "Success to Delete Content",
 		})

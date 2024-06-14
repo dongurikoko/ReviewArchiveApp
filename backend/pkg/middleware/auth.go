@@ -43,15 +43,19 @@ func AuthenticateMiddleware() echo.MiddlewareFunc {
 				return echo.NewHTTPError(http.StatusUnauthorized, "invalid token")
 			}
 
-			log.Printf("Verified ID Token: %v\n",token)
+			log.Printf("Verified ID Token: %v\n\n",token)
 
-			// JWTからユーザーIDを取得
-			userid := token.Claims["sub"]
+			// JWTからUIDを取得
+			// uid := token.Claims["sub"]
 
-			// ユーザーIDをコンテキストにセット
-			c.Set("userid", userid)
+			//log.Printf("uid: %v\n\n",uid)
 
-			log.Printf("userid: %v\n",userid)
+			uid := token.Claims["user_id"]
+
+			// UIDをコンテキストにセット
+			c.Set("uid", uid)
+
+			//log.Printf("uid: %v\n",uid)
 
 			// 次の処理
 			return next(c)

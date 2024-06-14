@@ -2,6 +2,7 @@ package model
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 )
 
@@ -22,16 +23,16 @@ func NewKeywordRepository(conn *sql.DB) *KeywordRepository {
 }
 
 type KeywordRepositoryInterface interface {
-	InsertKeyword(id int, keywords []string) error
+	InsertKeyword(keyword string,tx *sql.Tx)(int,error)
+	SelectKeywordIDByKeyword(keyword string,tx *sql.Tx)(int,error)
 	DeleteKeywordByID(id int) error
 	SelectKeywordByID(id int) ([]*Keyword, error)
-	SelectStringKeywordByID(id int) ([]string, error)
+	SelectStringKeywordByID(contentID int) ([]string, error)
 	SelectIDByContentKeyword(contentKeyword string) ([]int, error)
 }
 
-// キーワードテーブルに挿入する
+/* キーワードテーブルに挿入する(バルクインサートを使用する場合の実装)
 func (r *KeywordRepository) InsertKeyword(id int, keywords []string) error {
-	// バルクインサートの実装
 	insert := "INSERT INTO keyword (id, contentKeyword) VALUES "
 
 	vals := make([]any, 0, len(keywords))
@@ -55,6 +56,39 @@ func (r *KeywordRepository) InsertKeyword(id int, keywords []string) error {
 	return nil
 
 }
+*/
+
+// キーワードテーブルにレコードを追加して、keywordIDを返す
+func (r *KeywordRepository)InsertKeyword(keyword string,tx *sql.Tx)(int,error){
+	result,err := tx.Exec("INSERT INTO Keywords (keyword) VALUES (?)",keyword)
+	if err != nil{
+		return 0,fmt.Errorf("failed to InsertKeyword in InsertKeyword: %w",err)
+	}
+	keywordID,err := result.LastInsertId()
+	if err != nil{
+		return 0,fmt.Errorf("failed to LastInsertId in InsertKeyword: %w",err)
+	}
+	return int(keywordID),nil
+}
+
+// キーワードを元にkeywordIDを取得する(無い場合は新規登録)
+func (r *KeywordRepository)SelectKeywordIDByKeyword(keyword string,tx *sql.Tx)(int,error){
+	var keywordID int
+	err := tx.QueryRow("SELECT id FROM Keywords WHERE keyword = ?",keyword).Scan(&keywordID)
+	if err != nil{
+		if errors.Is(err,sql.ErrNoRows){
+			// キーワードがない場合は新規登録
+			keywordID,err = r.InsertKeyword(keyword,tx)
+			if err != nil{
+				return 0,fmt.Errorf("failed to InsertKeyword in SelectKeywordIDByKeyword: %w",err)
+			}
+			return keywordID,nil
+		}
+		return 0,fmt.Errorf("failed to SelectKeywordIDByKeyword: %w",err)
+	}
+
+	return keywordID,nil
+}
 
 /* キーワードを更新する
 func (r *KeywordRepository) UpdateKeywordByID(id int, record *Keyword) error {
@@ -68,7 +102,7 @@ func (r *KeywordRepository) UpdateKeywordByID(id int, record *Keyword) error {
 
 // キーワードを削除する
 func (r *KeywordRepository) DeleteKeywordByID(id int) error {
-	if _, err := r.Conn.Exec("DELETE FROM keyword WHERE id = ?", id); err != nil {
+	if _, err := r.Conn.Exec("DELETE FROM Keywords WHERE id = ?", id); err != nil {
 		return fmt.Errorf("failed to DeleteKeywordBy: %w", err)
 	}
 	return nil
@@ -84,10 +118,20 @@ func (r *KeywordRepository) SelectKeywordByID(id int) ([]*Keyword, error) {
 }
 
 // キーワードをidを条件に取得する([]stringを返す場合)
-func (r *KeywordRepository) SelectStringKeywordByID(id int) ([]string, error) {
-	rows, err := r.Conn.Query("SELECT contentKeyword FROM keyword WHERE id = ?", id)
+func (r *KeywordRepository) SelectStringKeywordByID(contentID int) ([]string, error) {
+	query := `
+    SELECT 
+        k.keyword
+    FROM 
+        Keywords k
+    JOIN 
+        Tagging t ON k.id = t.keyword_id
+    WHERE 
+        t.content_id = ?;
+    `
+	rows, err := r.Conn.Query(query, contentID)
 	if err != nil {
-		return nil, fmt.Errorf("failed to SELECT * in SelectKeywordByID: %w", err)
+		return nil, fmt.Errorf("failed to SELECT keyword in SelectStringKeywordByID: %w", err)
 	}
 	return ConverToString(rows)
 }
