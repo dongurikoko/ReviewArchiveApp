@@ -66,7 +66,7 @@ func (c *ListController) GetAllContents(uid string) ([]*ListResponse, error) {
 
 // 特定のコンテンツの詳細取得ロジック
 func (c *ListController) GetContentsByContentID(ID int) (*ContentRequest, error) {
-	// contentテーブルからIDを条件にレコードを取得
+	// ContentsテーブルからIDを条件にレコードを取得
 	content, err := c.ContentRepository.SelectContentByContentID(ID)
 
 	if err != nil {

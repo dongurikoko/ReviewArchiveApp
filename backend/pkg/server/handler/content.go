@@ -10,6 +10,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+
+type contentRequest struct {
+	Title       string   `json:"title"`
+	BeforeCode  string   `json:"before_code"`
+	AfterCode   string   `json:"after_code"`
+	Review      string   `json:"review"`
+	Memo        string   `json:"memo"`
+	Keywords    []string `json:"keywords"`
+}
+
 type ContentHandler struct {
 	ContentController controller.ContentControllerInterface
 }
@@ -23,15 +33,26 @@ func NewContentHandler(contentController controller.ContentControllerInterface) 
 // コンテンツ作成処理
 func (h *ContentHandler) HandleContentCreate() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		req := &controller.ContentRequest{}
+		req := &contentRequest{}
 		if err := c.Bind(req); err != nil {
 			return fmt.Errorf("failed to bind request in HandleContentCreate: %w", err)
 		}
 
+		// fmt.Printf("req: %v\n", req)
+
 		// contextからUIDを取得
 		uid := c.Get("uid").(string)
+
+		reqController := &controller.ContentRequest{
+			Title:       req.Title,
+			BeforeCode:  req.BeforeCode,
+			AfterCode:   req.AfterCode,
+			Review:      req.Review,
+			Memo:        req.Memo,
+			Keywords:    req.Keywords,
+		}
 		
-		if err := h.ContentController.ContentCreate(req,uid); err != nil {
+		if err := h.ContentController.ContentCreate(reqController,uid); err != nil {
 			return fmt.Errorf("failed to ContentCreate in HandleContentCreate: %w", err)
 		}
 		return c.JSON(http.StatusOK, echo.Map{
@@ -44,7 +65,7 @@ func (h *ContentHandler) HandleContentCreate() echo.HandlerFunc {
 // コンテンツのアップデート処理
 func (h *ContentHandler) HandleContentUpdate() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		req := &controller.ContentRequest{}
+		req := &contentRequest{}
 		if err := c.Bind(req); err != nil {
 			return fmt.Errorf("failed to bind request in HandleContentUpdate: %w", err)
 		}
@@ -56,7 +77,16 @@ func (h *ContentHandler) HandleContentUpdate() echo.HandlerFunc {
 
 		uid := c.Get("uid").(string)
 
-		if err := h.ContentController.ContentUpdate(contentID, req, uid); err != nil {
+		reqController := &controller.ContentRequest{
+			Title:       req.Title,
+			BeforeCode:  req.BeforeCode,
+			AfterCode:   req.AfterCode,
+			Review:      req.Review,
+			Memo:        req.Memo,
+			Keywords:    req.Keywords,
+		}
+
+		if err := h.ContentController.ContentUpdate(contentID, reqController, uid); err != nil {
 			return fmt.Errorf("failed to ContentUpdate in HandleContentUpdate: %w", err)
 		}
 		return c.JSON(http.StatusOK, echo.Map{

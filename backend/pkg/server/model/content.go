@@ -41,8 +41,8 @@ type ContentRepositoryInterface interface {
 
 // contentテーブルにレコードを追加し、追加したcontentIDを返す
 func (r *ContentRepository) InsertContent(record *Content,tx *sql.Tx) (int, error) {
-	result, err := tx.Exec("INSERT INTO Contents (title,before_code,after_code,review,memo,user_id) VALUES (?,?,?,?,?,?)",
-		record.Title, record.BeforeCode, record.AfterCode, record.Review, record.Memo, record.UserID)
+	result, err := tx.Exec("INSERT INTO Contents (title, before_code, after_code, review, memo, user_id) VALUES (?, ?, ?, ?, ?, ?)",
+		record.Title, record.BeforeCode, record.AfterCode, record.Review, record.Memo, record.UserID)	
 	if err != nil {
 		return 0, fmt.Errorf("failed to InsertContent: %w", err)
 	}

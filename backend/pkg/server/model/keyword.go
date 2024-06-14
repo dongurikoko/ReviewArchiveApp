@@ -102,7 +102,7 @@ func (r *KeywordRepository) UpdateKeywordByID(id int, record *Keyword) error {
 
 // キーワードを削除する
 func (r *KeywordRepository) DeleteKeywordByID(id int) error {
-	if _, err := r.Conn.Exec("DELETE FROM keyword WHERE id = ?", id); err != nil {
+	if _, err := r.Conn.Exec("DELETE FROM Keywords WHERE id = ?", id); err != nil {
 		return fmt.Errorf("failed to DeleteKeywordBy: %w", err)
 	}
 	return nil
