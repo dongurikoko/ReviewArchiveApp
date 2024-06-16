@@ -23,8 +23,8 @@ func NewKeywordRepository(conn *sql.DB) *KeywordRepository {
 }
 
 type KeywordRepositoryInterface interface {
-	InsertKeyword(keyword string,tx *sql.Tx)(int,error)
-	SelectKeywordIDByKeyword(keyword string,tx *sql.Tx)(int,error)
+	InsertKeyword(keyword string, tx *sql.Tx) (int, error)
+	SelectKeywordIDByKeyword(keyword string, tx *sql.Tx) (int, error)
 	DeleteKeywordByID(id int) error
 	SelectKeywordByID(id int) ([]*Keyword, error)
 	SelectStringKeywordByID(contentID int) ([]string, error)
@@ -59,35 +59,35 @@ func (r *KeywordRepository) InsertKeyword(id int, keywords []string) error {
 */
 
 // キーワードテーブルにレコードを追加して、keywordIDを返す
-func (r *KeywordRepository)InsertKeyword(keyword string,tx *sql.Tx)(int,error){
-	result,err := tx.Exec("INSERT INTO Keywords (keyword) VALUES (?)",keyword)
-	if err != nil{
-		return 0,fmt.Errorf("failed to InsertKeyword in InsertKeyword: %w",err)
+func (r *KeywordRepository) InsertKeyword(keyword string, tx *sql.Tx) (int, error) {
+	result, err := tx.Exec("INSERT INTO Keywords (keyword) VALUES (?)", keyword)
+	if err != nil {
+		return 0, fmt.Errorf("failed to InsertKeyword in InsertKeyword: %w", err)
 	}
-	keywordID,err := result.LastInsertId()
-	if err != nil{
-		return 0,fmt.Errorf("failed to LastInsertId in InsertKeyword: %w",err)
+	keywordID, err := result.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("failed to LastInsertId in InsertKeyword: %w", err)
 	}
-	return int(keywordID),nil
+	return int(keywordID), nil
 }
 
 // キーワードを元にkeywordIDを取得する(無い場合は新規登録)
-func (r *KeywordRepository)SelectKeywordIDByKeyword(keyword string,tx *sql.Tx)(int,error){
+func (r *KeywordRepository) SelectKeywordIDByKeyword(keyword string, tx *sql.Tx) (int, error) {
 	var keywordID int
-	err := tx.QueryRow("SELECT id FROM Keywords WHERE keyword = ?",keyword).Scan(&keywordID)
-	if err != nil{
-		if errors.Is(err,sql.ErrNoRows){
+	err := tx.QueryRow("SELECT id FROM Keywords WHERE keyword = ?", keyword).Scan(&keywordID)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
 			// キーワードがない場合は新規登録
-			keywordID,err = r.InsertKeyword(keyword,tx)
-			if err != nil{
-				return 0,fmt.Errorf("failed to InsertKeyword in SelectKeywordIDByKeyword: %w",err)
+			keywordID, err = r.InsertKeyword(keyword, tx)
+			if err != nil {
+				return 0, fmt.Errorf("failed to InsertKeyword in SelectKeywordIDByKeyword: %w", err)
 			}
-			return keywordID,nil
+			return keywordID, nil
 		}
-		return 0,fmt.Errorf("failed to SelectKeywordIDByKeyword: %w",err)
+		return 0, fmt.Errorf("failed to SelectKeywordIDByKeyword: %w", err)
 	}
 
-	return keywordID,nil
+	return keywordID, nil
 }
 
 /* キーワードを更新する
