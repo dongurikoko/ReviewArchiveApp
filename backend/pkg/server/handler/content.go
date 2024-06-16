@@ -10,14 +10,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-
 type contentRequest struct {
-	Title       string   `json:"title"`
-	BeforeCode  string   `json:"before_code"`
-	AfterCode   string   `json:"after_code"`
-	Review      string   `json:"review"`
-	Memo        string   `json:"memo"`
-	Keywords    []string `json:"keywords"`
+	Title      string   `json:"title"`
+	BeforeCode string   `json:"before_code"`
+	AfterCode  string   `json:"after_code"`
+	Review     string   `json:"review"`
+	Memo       string   `json:"memo"`
+	Keywords   []string `json:"keywords"`
 }
 
 type ContentHandler struct {
@@ -44,15 +43,15 @@ func (h *ContentHandler) HandleContentCreate() echo.HandlerFunc {
 		uid := c.Get("uid").(string)
 
 		reqController := &controller.ContentRequest{
-			Title:       req.Title,
-			BeforeCode:  req.BeforeCode,
-			AfterCode:   req.AfterCode,
-			Review:      req.Review,
-			Memo:        req.Memo,
-			Keywords:    req.Keywords,
+			Title:      req.Title,
+			BeforeCode: req.BeforeCode,
+			AfterCode:  req.AfterCode,
+			Review:     req.Review,
+			Memo:       req.Memo,
+			Keywords:   req.Keywords,
 		}
-		
-		if err := h.ContentController.ContentCreate(reqController,uid); err != nil {
+
+		if err := h.ContentController.ContentCreate(reqController, uid); err != nil {
 			return fmt.Errorf("failed to ContentCreate in HandleContentCreate: %w", err)
 		}
 		return c.JSON(http.StatusOK, echo.Map{
@@ -78,12 +77,12 @@ func (h *ContentHandler) HandleContentUpdate() echo.HandlerFunc {
 		uid := c.Get("uid").(string)
 
 		reqController := &controller.ContentRequest{
-			Title:       req.Title,
-			BeforeCode:  req.BeforeCode,
-			AfterCode:   req.AfterCode,
-			Review:      req.Review,
-			Memo:        req.Memo,
-			Keywords:    req.Keywords,
+			Title:      req.Title,
+			BeforeCode: req.BeforeCode,
+			AfterCode:  req.AfterCode,
+			Review:     req.Review,
+			Memo:       req.Memo,
+			Keywords:   req.Keywords,
 		}
 
 		if err := h.ContentController.ContentUpdate(contentID, reqController, uid); err != nil {

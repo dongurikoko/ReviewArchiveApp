@@ -10,9 +10,9 @@ import (
 )
 
 type content struct {
-	ContentID  int      `json:"content_id"`
-	Title      string   `json:"title"`
-	Keywords   []string `json:"keywords"`
+	ContentID int      `json:"content_id"`
+	Title     string   `json:"title"`
+	Keywords  []string `json:"keywords"`
 }
 
 type alllist struct {
@@ -21,12 +21,12 @@ type alllist struct {
 
 type listbycontentid struct {
 	ContentID  int      `json:"content_id"`
-	Title       string   `json:"title"`
+	Title      string   `json:"title"`
 	BeforeCode string   `json:"before_code"`
 	AfterCode  string   `json:"after_code"`
-	Review      string   `json:"review"`
-	Memo        string   `json:"memo"`
-	Keywords    []string `json:"keywords"`
+	Review     string   `json:"review"`
+	Memo       string   `json:"memo"`
+	Keywords   []string `json:"keywords"`
 }
 
 type ListHandler struct {
@@ -70,7 +70,6 @@ func (h *ListHandler) HandleListGet() echo.HandlerFunc {
 	}
 }
 
-
 // 特定のコンテンツの詳細取得処理
 func (h *ListHandler) HandleListGetByContentID() echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -88,12 +87,12 @@ func (h *ListHandler) HandleListGetByContentID() echo.HandlerFunc {
 		}
 		response := listbycontentid{
 			ContentID:  contentID,
-			Title:       content.Title,
+			Title:      content.Title,
 			BeforeCode: content.BeforeCode,
 			AfterCode:  content.AfterCode,
-			Review:      content.Review,
-			Memo:        content.Memo,
-			Keywords:    content.Keywords,
+			Review:     content.Review,
+			Memo:       content.Memo,
+			Keywords:   content.Keywords,
 		}
 
 		return c.JSON(http.StatusOK, &response)
@@ -105,7 +104,7 @@ func (h *ListHandler) HandleListSearch() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// クエリパラメータからkeywordを取得
 		keyword := c.QueryParam("keyword")
-		
+
 		// contextからUIDを取得
 		uidwithnil := c.Get("uid")
 
@@ -125,7 +124,7 @@ func (h *ListHandler) HandleListSearch() echo.HandlerFunc {
 				return fmt.Errorf("failed to GetAllContents in HandleListGet: %w", err)
 			}
 		} else { // keywordがある場合はキーワードが一致するコンテンツを一覧取得
-			lists, err = h.ListController.SearchContents(keyword,uid)
+			lists, err = h.ListController.SearchContents(keyword, uid)
 			if err != nil {
 				return fmt.Errorf("failed to SearchContents in HandleListSearch: %w", err)
 			}

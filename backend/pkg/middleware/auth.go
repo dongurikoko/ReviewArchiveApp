@@ -28,8 +28,8 @@ func AuthenticateMiddleware() echo.MiddlewareFunc {
 			}
 
 			// firebase authを初期化
-			auth,err := app.Auth(context.Background())
-			if err != nil{
+			auth, err := app.Auth(context.Background())
+			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, "failed to initialize firebase auth")
 			}
 
@@ -43,7 +43,7 @@ func AuthenticateMiddleware() echo.MiddlewareFunc {
 				return echo.NewHTTPError(http.StatusUnauthorized, "invalid token")
 			}
 
-			log.Printf("Verified ID Token: %v\n\n",token)
+			log.Printf("Verified ID Token: %v\n\n", token)
 
 			// JWTからUIDを取得
 			// uid := token.Claims["sub"]
